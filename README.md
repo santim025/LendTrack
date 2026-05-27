@@ -1,117 +1,163 @@
 # Prestador App
 
-Una aplicación moderna para la gestión de préstamos personales, diseñada para facilitar el seguimiento de clientes, créditos y pagos.
+> Aplicación web completa para gestión de préstamos personales. Construida con Next.js 16, PostgreSQL y Prisma ORM.
 
-## Stack
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-- Next.js 16 (App Router) + React 19 + TypeScript
-- PostgreSQL 16 + Prisma ORM
-- NextAuth.js (credenciales email/password)
-- Tailwind CSS 4 + shadcn/ui
-- Docker + Docker Compose para despliegue local
+## 📋 Descripción
 
-## Puesta en marcha local
+**Prestador App** es una aplicación web full-stack diseñada para gestionar préstamos personales de manera eficiente. Permite administrar clientes, crear préstamos con cálculo automático de intereses, registrar pagos y hacer seguimiento del capital.
 
-Este proyecto depende de una BD PostgreSQL compartida que vive en `C:\Projects\docker-infra`. Lee el README de esa carpeta para arrancar la BD antes de levantar la app.
+## ✨ Características
 
-Pasos resumidos:
+### Dashboard
+- Capital disponible, capital prestado y ganancias totales
+- Porcentaje de crecimiento
+- Gráficos mensuales
+- Vista rápida del estado del negocio
 
-```powershell
-# 1. (una sola vez) crear la red Docker compartida
-docker network create shared-network
+### Gestión de Clientes
+- Registro completo de clientes
+- Información de contacto
+- Historial de préstamos por cliente
 
-# 2. levantar la BD central (en C:\Projects\docker-infra)
-cd C:\Projects\docker-infra ; docker compose up -d
+### Gestión de Préstamos
+- Creación de préstamos con tasa de interés configurable
+- Cálculo automático de cuotas mensuales
+- Programación de pagos
+- Estados: activo, saldado, en mora
 
-# 3. crear .env.local en la raiz de este proyecto (ver .env.example)
+### Gestión de Pagos
+- Registro de pagos individuales
+- Historial completo de transacciones
+- Actualización automática de saldos
 
-# 4. levantar la app
-cd C:\Projects\prestador-app ; docker compose up -d --build
+### Seguridad
+- Autenticación con NextAuth.js
+- Tokens JWT seguros
+- Hash de contraseñas con bcrypt
+- Aislamiento de datos por usuario
+
+## 🖼️ Capturas de Pantalla
+
+### Dashboard
+*Aquí va una captura del dashboard principal*
+
+### Gestión de Clientes
+*Aquí va una captura de la lista de clientes*
+
+### Nuevo Préstamo
+*Aquí va una captura del formulario de préstamo*
+
+---
+
+## 🚀 Uso
+
+### Requisitos Previos
+- Node.js 18+
+- Docker y Docker Compose
+- PostgreSQL 16 (o usar Docker)
+
+### Instalación Rápida con Docker
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/santim025/prestador-app.git
+
+# Entrar al directorio
+cd prestador-app
+
+# Iniciar con Docker Compose
+docker-compose up -d
 ```
 
-La app quedara en http://localhost:3000 (y accesible desde otros dispositivos via Tailscale usando la IP de esta PC).
+### Instalación Manual
 
-## Dashboard
+```bash
+# Clonar el repositorio
+git clone https://github.com/santim025/prestador-app.git
 
-El dashboard es tu centro de control financiero. Aquí encontrarás:
+# Entrar al directorio
+cd prestador-app
 
-- **Capital Disponible:** Muestra cuánto dinero tienes disponible para prestar (tu capital inicial más intereses ganados, menos lo que está prestado actualmente).
-- **Capital Prestado:** Total de dinero que tienes actualmente en préstamos activos.
-- **Ganancias Totales:** Suma de todos los intereses que has ganado hasta la fecha.
-- **Crecimiento:** Porcentaje de crecimiento de tu capital respecto al inicial.
-- **Gráfico Mensual:** Visualiza tus ganancias mes a mes.
+# Instalar dependencias
+npm install
 
-## 👥 Gestión de Clientes
+# Configurar variables de entorno
+cp .env.example .env
+# Editar .env con tu PostgreSQL connection string
 
-### Agregar un Cliente
+# Generar cliente Prisma
+npx prisma generate
 
-1.  Ve a la sección **Clientes** desde el menú lateral.
-2.  Haz clic en **Agregar Cliente**.
-3.  Completa el formulario con:
-    - Nombre completo
-    - Número de teléfono
-    - Dirección
-    - URL de imagen de pagare (opcional)
-4.  Guarda el cliente.
+# Aplicar migraciones
+npx prisma migrate deploy
 
-### Ver Clientes
+# Iniciar servidor
+npm run dev
+```
 
-Todos tus clientes aparecen en una lista con su información básica y el total de préstamos activos que tienen.
+### Variables de Entorno
 
-## 💰 Gestión de Préstamos
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/prestador"
+NEXTAUTH_SECRET="tu-secret-aqui"
+NEXTAUTH_URL="http://localhost:3000"
+```
 
-### Crear un Préstamo
+## 📁 Estructura del Proyecto
 
-1.  Ve a la sección **Préstamos**.
-2.  Haz clic en **Nuevo Préstamo**.
-3.  Selecciona el cliente (debe estar registrado previamente).
-4.  Ingresa:
-    - Monto del préstamo
-    - Tasa de interés mensual (%)
-    - Número de meses
-5.  El sistema calculará automáticamente:
-    - Cuota mensual
-    - Total de intereses
-    - Total a pagar
-6.  Confirma y el préstamo se creará con todos los pagos mensuales programados.
+```
+prestador-app/
+├── prisma/
+│   └── schema.prisma     # Schema de base de datos
+├── src/
+│   ├── app/              # Next.js App Router
+│   │   ├── api/          # Rutas API
+│   │   ├── dashboard/    # Páginas del dashboard
+│   │   ├── clients/      # Gestión de clientes
+│   │   ├── loans/        # Gestión de préstamos
+│   │   └── payments/     # Gestión de pagos
+│   ├── components/       # Componentes React
+│   ├── lib/              # Utilidades y configuración
+│   └── styles/           # Estilos globales
+├── public/
+├── docker-compose.yml
+└── package.json
+```
 
-### Ver Préstamos
+## 🛠️ Tecnologías
 
-- **Activos:** Préstamos que aún tienen pagos pendientes.
-- **Completados:** Préstamos totalmente pagados.
-- Cada préstamo muestra el progreso de pagos y el saldo pendiente.
+| Categoría | Tecnología |
+|-----------|------------|
+| Frontend | Next.js 16, React 19, TypeScript |
+| Estilos | Tailwind CSS 4, shadcn/ui |
+| Backend | Next.js API Routes |
+| Base de Datos | PostgreSQL 16 |
+| ORM | Prisma |
+| Auth | NextAuth.js, bcrypt |
+| Deployment | Docker, Vercel |
 
-## 💳 Gestión de Pagos
+## 🔐 Seguridad
 
-### Registrar un Pago
+- Autenticación JWT con NextAuth.js
+- Contraseñas hasheadas con bcrypt
+- Aislamiento de datos a nivel de API (cada usuario solo ve sus datos)
+- Variables de entorno para secrets
 
-1.  Ve a la sección **Pagos**.
-2.  Busca el pago pendiente del mes correspondiente.
-3.  Haz clic en **Marcar como Pagado**.
-4.  El sistema automáticamente:
-    - Actualiza el estado del pago
-    - Suma el interés a tus ganancias totales
-    - Genera el siguiente pago mensual si quedan cuotas
+## 🌐 Demo
 
-### Ver Historial
+Visita la versión en vivo: [prestador-app-pink.vercel.app](https://prestador-app-pink.vercel.app)
 
-- **Pendientes:** Pagos que aún no se han recibido.
-- **Completados:** Historial de todos los pagos recibidos.
+## 📝 Licencia
 
-## 💼 Gestión de Capital
+[MIT](LICENSE)
 
-1.  Ve a la sección **Capital**.
-2.  Aquí puedes:
-    - Ver tu capital inicial
-    - Ver tu capital actual (inicial + intereses ganados)
-    - Actualizar tu capital inicial si realizas nuevas inversiones
-3.  El sistema calcula automáticamente:
-    - Total de intereses ganados
-    - Porcentaje de crecimiento
-    - Capital disponible para nuevos préstamos
+---
 
-## Seguridad
-
-- Autenticacion con NextAuth.js (JWT + credenciales email/password, passwords hasheadas con bcrypt).
-- Cada usuario solo puede ver y gestionar sus propios datos (verificado a nivel de API route).
-- Las sesiones se mantienen seguras mediante JWT firmados con `NEXTAUTH_SECRET`.
+*© 2024 Prestador App*
