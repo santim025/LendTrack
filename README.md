@@ -45,14 +45,26 @@
 
 ## 🖼️ Capturas de Pantalla
 
-### Dashboard
-*Aquí va una captura del dashboard principal*
+### Logo
+![Logo](screenshots/01_Logo.png)
 
-### Gestión de Clientes
-*Aquí va una captura de la lista de clientes*
+### Bienvenido
+![Bienvenido](screenshots/02_Bienvenido.png)
 
-### Nuevo Préstamo
-*Aquí va una captura del formulario de préstamo*
+### Registro
+![Registro](screenshots/03_Registro.png)
+
+### Mi Panel
+![Mi Panel](screenshots/04_Mi_Panel.png)
+
+### Agregar Préstamo
+![Agregar Préstamo](screenshots/05_Agregar_Prestamo.png)
+
+### Panel Actualizado
+![Panel Actualizado](screenshots/06_Panel_Actualizado.png)
+
+### Mis Préstamos
+![Mis Préstamos](screenshots/07_Mis_Prestamos.png)
 
 ---
 
