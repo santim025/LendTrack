@@ -64,6 +64,7 @@ RUN mkdir -p /tmp/pdfkit-install \
 
 RUN mkdir -p ./public/uploads && chown -R nextjs:nodejs ./public/uploads
 
+COPY --chown=nextjs:nodejs scripts ./scripts
 COPY --chown=nextjs:nodejs docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh
 
@@ -71,8 +72,10 @@ USER nextjs
 
 EXPOSE 3000
 
+# Railway enruta por IPv6; escuchar en :: (dual-stack) cubre IPv4 e IPv6 y
+# evita el 502 "failed to respond".
 ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
+ENV HOSTNAME="::"
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
 CMD ["node", "server.js"]

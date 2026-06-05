@@ -33,9 +33,16 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Contraseña incorrecta")
         }
 
+        // Registrar el último acceso (para el panel de administración)
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { lastLogin: new Date() },
+        })
+
         return {
           id: user.id,
           email: user.email,
+          role: user.role,
         }
       },
     }),
@@ -53,6 +60,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id
         token.email = user.email
+        token.role = (user as { role?: string }).role ?? "user"
       }
       return token
     },
@@ -60,6 +68,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id as string
         session.user.email = token.email as string
+        ;(session.user as { role?: string }).role = (token.role as string) ?? "user"
       }
       return session
     },

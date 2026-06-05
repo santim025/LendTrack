@@ -11,6 +11,7 @@ import {
   CreditCard,
   Wallet,
   FileText,
+  ShieldCheck,
   LogOut,
 } from "lucide-react";
 
@@ -35,6 +36,7 @@ function getInitials(name?: string | null, email?: string | null) {
 export function DashboardNav() {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const isAdmin = (session?.user as { role?: string } | undefined)?.role === "admin";
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: "/auth/login" });
@@ -64,6 +66,15 @@ export function DashboardNav() {
           >
             {initials}
           </div>
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className="inline-flex items-center justify-center rounded-lg border border-[rgba(0,0,0,0.12)] bg-card p-1.5 text-secondary transition-colors hover:text-foreground"
+              aria-label="Administración"
+            >
+              <ShieldCheck className="h-3.5 w-3.5" strokeWidth={1.75} />
+            </Link>
+          )}
           <button
             onClick={handleLogout}
             className="inline-flex items-center justify-center rounded-lg border border-[rgba(0,0,0,0.12)] bg-card p-1.5 text-secondary transition-colors hover:text-foreground"
@@ -111,6 +122,21 @@ export function DashboardNav() {
               </Link>
             );
           })}
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className={cn(
+                "inline-flex items-center gap-2 h-full px-4 text-[13px] transition-colors border-b-2",
+                pathname === "/admin"
+                  ? "border-foreground text-foreground"
+                  : "border-transparent text-secondary hover:text-foreground"
+              )}
+              style={{ fontWeight: pathname === "/admin" ? 500 : 400 }}
+            >
+              <ShieldCheck className="h-4 w-4" strokeWidth={pathname === "/admin" ? 2.25 : 1.75} />
+              Admin
+            </Link>
+          )}
         </div>
 
         <div className="flex items-center gap-3 flex-shrink-0">
