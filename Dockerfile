@@ -7,13 +7,13 @@ WORKDIR /app
 FROM base AS deps
 COPY package.json pnpm-lock.yaml* ./
 COPY prisma ./prisma/
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.17.0 --activate
 RUN pnpm install
 
 # ---- Builder ----
 FROM base AS builder
 WORKDIR /app
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@10.17.0 --activate
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate
