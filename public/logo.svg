@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 196 48" fill="none">
+  <rect x="6" y="8" width="32" height="32" rx="9" fill="#0F6E56"/>
+  <path d="M17 16v16h11" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="50" y="32" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="23" font-weight="600" fill="#1A202C" letter-spacing="-0.3">LendTrack</text>
+</svg>
