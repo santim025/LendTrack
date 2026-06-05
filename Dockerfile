@@ -60,6 +60,7 @@ RUN mkdir -p /tmp/pdfkit-install \
     && echo '{"dependencies":{"pdfkit":"^0.18.0","bcryptjs":"^2.4.3"}}' > package.json \
     && npm install --omit=dev --loglevel=error \
     && mkdir -p /app/node_modules \
+    && rm -rf /app/node_modules/bcryptjs \
     && cp -rn /tmp/pdfkit-install/node_modules/. /app/node_modules/ \
     && chown -R nextjs:nodejs /app/node_modules \
     && rm -rf /tmp/pdfkit-install
