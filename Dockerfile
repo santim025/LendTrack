@@ -52,10 +52,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # el tracer del standalone no copia el paquete completo. Lo instalamos con npm
 # (layout plano) y lo mezclamos dentro de node_modules del standalone, incluyendo
 # todas sus deps transitivas (fontkit, crypto-js, linebreak, png-js, etc.).
+# bcryptjs va junto porque el script scripts/seed-admin.mjs lo necesita en el
+# nivel superior de node_modules (el tracer del standalone tampoco lo deja ahí).
 USER root
 RUN mkdir -p /tmp/pdfkit-install \
     && cd /tmp/pdfkit-install \
-    && echo '{"dependencies":{"pdfkit":"^0.18.0"}}' > package.json \
+    && echo '{"dependencies":{"pdfkit":"^0.18.0","bcryptjs":"^2.4.3"}}' > package.json \
     && npm install --omit=dev --loglevel=error \
     && mkdir -p /app/node_modules \
     && cp -rn /tmp/pdfkit-install/node_modules/. /app/node_modules/ \
