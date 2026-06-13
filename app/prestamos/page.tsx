@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { LoanForm } from "@/components/loans/loan-form";
 import { LoanCard } from "@/components/loans/loan-card";
-import { HandCoins } from "lucide-react";
+import { HandCoins, Plus } from "lucide-react";
 
 interface Loan {
   id: string;
@@ -26,6 +26,12 @@ interface Loan {
   status: string;
   clients: {
     name: string;
+    id: string;
+  };
+  payments: {
+    total: number;
+    paid: number;
+    pending: number;
   };
 }
 
@@ -59,42 +65,49 @@ export default function PrestamosPage() {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <p className="text-secondary text-sm">Cargando...</p>
+        <p className="text-[var(--text-secondary-new)] text-sm">Cargando...</p>
       </div>
     );
   }
 
+  const activeLoans = loans.filter((l) => l.status === "active");
+  const completedLoans = loans.filter((l) => l.status === "completed");
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[var(--surface-0)]">
       <DashboardNav />
 
-      <div className="space-y-4 p-4 sm:p-6 max-w-7xl mx-auto">
-        <PageHeader
-          title="Préstamos Activos"
-          action={
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <button
-                  className="rounded-lg bg-foreground text-background px-4 py-2 text-[13px] transition-opacity hover:opacity-90"
-                  style={{ fontWeight: 500 }}
-                >
-                  Crear Préstamo
-                </button>
-              </DialogTrigger>
-              <DialogContent className="w-[90%] sm:w-full rounded-xl">
-                <DialogHeader>
-                  <DialogTitle
-                    className="text-[16px]"
-                    style={{ fontWeight: 500 }}
+      <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+        <div className="mb-6">
+          <PageHeader
+            title="Préstamos"
+            subtitle={`${activeLoans.length} activo${activeLoans.length !== 1 ? "s" : ""} · ${completedLoans.length} completado${completedLoans.length !== 1 ? "s" : ""}`}
+            action={
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <button
+                    className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand-500)] px-4 py-2 text-[13px] text-white transition-colors hover:bg-[var(--brand-600)]"
+                    style={{ fontWeight: 600 }}
                   >
+                    <Plus className="h-4 w-4" strokeWidth={2} />
                     Nuevo Préstamo
-                  </DialogTitle>
-                </DialogHeader>
-                <LoanForm onSuccess={handleLoanAdded} />
-              </DialogContent>
-            </Dialog>
-          }
-        />
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="w-[90%] sm:w-full rounded-xl max-w-lg">
+                  <DialogHeader>
+                    <DialogTitle
+                      className="text-[16px] font-display"
+                      style={{ fontWeight: 600 }}
+                    >
+                      Nuevo Préstamo
+                    </DialogTitle>
+                  </DialogHeader>
+                  <LoanForm onSuccess={handleLoanAdded} />
+                </DialogContent>
+              </Dialog>
+            }
+          />
+        </div>
 
         {loans.length === 0 ? (
           <EmptyState
@@ -103,7 +116,7 @@ export default function PrestamosPage() {
             description="Registra tu primer préstamo para llevar el seguimiento de intereses y pagos."
           />
         ) : (
-          <div className="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-3">
             {loans.map((loan) => (
               <LoanCard key={loan.id} loan={loan} onUpdate={fetchLoans} />
             ))}

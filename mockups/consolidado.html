@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LendTrack V2 — Consolidado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand-50: #E8F5EF; --brand-100: #C6E7D3; --brand-200: #8FD4AC;
+  --brand-300: #4DB87C; --brand-400: #1A9D5E; --brand-500: #0A6847;
+  --brand-600: #085A3B; --brand-700: #064C31; --brand-800: #043E27;
+  --off-black: #1A1A2E; --text-secondary: #6B7280; --text-tertiary: #9CA3AF;
+  --border: rgba(0,0,0,0.06); --border-strong: rgba(0,0,0,0.1);
+  --bg-base: #FAF7F2; --bg-subtle: #F5F1EB; --bg-card: #FFFFFF;
+  --success: #0A6847; --success-bg: #E8F5EF;
+  --warning: #B45309; --warning-bg: #FEF3C7;
+  --danger: #DC2626; --danger-bg: #FEE2E2;
+  --info: #1E4FC4; --info-bg: #E6EFFE;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.03);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 20px;
+  --radius-full: 9999px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --text-xs: 11px; --text-sm: 13px; --text-base: 14px; --text-lg: 16px;
+  --text-xl: 20px; --text-2xl: 24px; --text-3xl: 30px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--bg-base); color: var(--off-black); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body::before { content: ''; position: fixed; inset: 0; background-image: radial-gradient(circle, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 24px 24px; pointer-events: none; z-index: 0; }
+
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.animate-in { animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.stagger-1 { animation-delay: 0ms; } .stagger-2 { animation-delay: 60ms; }
+.stagger-3 { animation-delay: 120ms; } .stagger-4 { animation-delay: 180ms; }
+.stagger-5 { animation-delay: 240ms; } .stagger-6 { animation-delay: 300ms; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+
+/* HEADER */
+.header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); height: 56px; display: flex; align-items: center; padding: 0 var(--space-6); }
+.header-inner { max-width: 1280px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; }
+.logo { display: flex; align-items: center; gap: var(--space-2); text-decoration: none; }
+.logo-icon { width: 32px; height: 32px; background: var(--brand-500); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: white; font-family: var(--font-display); font-weight: 800; font-size: 14px; }
+.logo-text { font-family: var(--font-display); font-weight: 700; font-size: var(--text-lg); color: var(--off-black); }
+.header-nav { display: flex; align-items: center; gap: var(--space-1); height: 100%; }
+.nav-link { display: flex; align-items: center; gap: var(--space-2); padding: 0 var(--space-4); height: 100%; font-size: var(--text-sm); font-weight: 500; color: var(--text-secondary); text-decoration: none; border-bottom: 2px solid transparent; transition: all 0.2s; }
+.nav-link:hover { color: var(--off-black); }
+.nav-link.active { color: var(--off-black); border-bottom-color: var(--brand-500); }
+.nav-link svg { width: 16px; height: 16px; }
+.header-right { display: flex; align-items: center; gap: var(--space-3); }
+.avatar { width: 32px; height: 32px; border-radius: var(--radius-full); background: var(--brand-50); color: var(--brand-600); display: flex; align-items: center; justify-content: center; font-size: var(--text-xs); font-weight: 600; }
+.btn-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--bg-card); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); cursor: pointer; }
+.btn-icon svg { width: 16px; height: 16px; }
+.notification-badge { position: relative; }
+.notification-badge::after { content: '3'; position: absolute; top: -4px; right: -4px; width: 16px; height: 16px; border-radius: var(--radius-full); background: var(--danger); color: white; font-size: 9px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+
+/* MAIN */
+.main { max-width: 960px; margin: 0 auto; padding: var(--space-8) var(--space-6); padding-bottom: var(--space-16); position: relative; z-index: 1; }
+
+/* PAGE HEADER */
+.page-header { margin-bottom: var(--space-6); }
+.page-title { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; }
+.page-subtitle { font-size: var(--text-sm); color: var(--text-secondary); margin-top: 4px; }
+
+/* SECTION CARD */
+.section-card { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border); overflow: hidden; }
+.section-header { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-6); border-bottom: 1px solid var(--border); }
+.section-icon { width: 44px; height: 44px; border-radius: var(--radius-md); background: var(--brand-50); color: var(--brand-600); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.section-icon svg { width: 22px; height: 22px; }
+.section-title { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 600; }
+.section-desc { font-size: var(--text-sm); color: var(--text-secondary); margin-top: 4px; line-height: 1.5; }
+
+/* FORM */
+.form-content { padding: var(--space-6); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-5); }
+.form-group { display: flex; flex-direction: column; gap: var(--space-2); }
+.form-label { font-size: var(--text-xs); font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
+.form-input { padding: var(--space-3) var(--space-4); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: var(--text-sm); transition: all 0.15s; background: var(--bg-card); }
+.form-input:focus { outline: none; border-color: var(--brand-400); box-shadow: 0 0 0 3px rgba(10,104,71,0.1); }
+.form-hint { font-size: var(--text-xs); color: var(--text-tertiary); }
+
+/* PERIOD SUMMARY */
+.period-summary { background: var(--bg-subtle); border-radius: var(--radius-md); padding: var(--space-5); margin-bottom: var(--space-5); }
+.period-summary-title { font-size: var(--text-xs); font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: var(--space-3); }
+.period-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+.period-stat-value { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 700; color: var(--brand-500); }
+.period-stat-label { font-size: var(--text-xs); color: var(--text-tertiary); margin-top: 2px; }
+
+/* PREVIEW TABLE */
+.preview-section { margin-bottom: var(--space-5); }
+.preview-title { font-size: var(--text-sm); font-weight: 600; margin-bottom: var(--space-3); display: flex; align-items: center; gap: var(--space-2); }
+.preview-title svg { width: 16px; height: 16px; color: var(--text-tertiary); }
+.preview-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+.preview-table th { text-align: left; padding: var(--space-2) var(--space-3); font-size: var(--text-xs); font-weight: 600; color: var(--text-secondary); background: var(--bg-subtle); border-bottom: 1px solid var(--border); }
+.preview-table td { padding: var(--space-2) var(--space-3); font-size: var(--text-xs); border-bottom: 1px solid var(--border); }
+.preview-table tr:last-child td { border-bottom: none; }
+.preview-table .amount { font-family: var(--font-display); font-weight: 600; }
+.preview-table .total-row td { font-weight: 600; background: var(--brand-50); border-top: 2px solid var(--brand-200); }
+
+/* ACTIONS */
+.actions { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); padding: var(--space-3) var(--space-5); border-radius: var(--radius-sm); font-size: var(--text-sm); font-weight: 500; cursor: pointer; transition: all 0.15s; border: none; }
+.btn svg { width: 16px; height: 16px; }
+.btn-primary { background: var(--brand-500); color: white; }
+.btn-primary:hover { background: var(--brand-600); }
+.btn-secondary { background: var(--bg-card); color: var(--off-black); border: 1px solid var(--border-strong); }
+.btn-secondary:hover { background: var(--bg-subtle); }
+
+/* INFO CARD */
+.info-card { background: var(--bg-card); border-radius: var(--radius-lg); padding: var(--space-5); box-shadow: var(--shadow-sm); border: 1px solid var(--border); margin-top: var(--space-4); }
+.info-card-title { font-family: var(--font-display); font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-3); }
+.info-card-list { list-style: none; }
+.info-card-list li { display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-2) 0; font-size: var(--text-sm); color: var(--text-secondary); line-height: 1.5; }
+.info-card-list li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--brand-500); margin-top: 7px; flex-shrink: 0; }
+
+/* BOTTOM NAV */
+.bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-top: 1px solid var(--border); height: 64px; }
+.bottom-nav-inner { display: flex; align-items: center; justify-content: space-around; height: 100%; }
+.bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; text-decoration: none; color: var(--text-tertiary); padding: var(--space-2) var(--space-3); }
+.bottom-nav-item.active { color: var(--brand-500); }
+.bottom-nav-item svg { width: 20px; height: 20px; }
+.bottom-nav-item span { font-size: 10px; font-weight: 500; }
+
+.mockup-badge { position: fixed; bottom: 80px; right: 16px; z-index: 100; background: var(--off-black); color: white; font-family: var(--font-body); font-size: 11px; font-weight: 500; padding: 6px 12px; border-radius: var(--radius-full); box-shadow: var(--shadow-lg); }
+@media (min-width: 769px) { .mockup-badge { bottom: 16px; } }
+
+@media (max-width: 1024px) { .header-nav { display: none; } .form-row { grid-template-columns: 1fr; } .period-stats { grid-template-columns: 1fr; } }
+@media (max-width: 768px) { .main { padding: var(--space-4) var(--space-4) 80px; } .section-header { flex-direction: column; text-align: center; } .actions { flex-direction: column; } .actions .btn { width: 100%; } .bottom-nav { display: block; } .preview-table { font-size: 10px; } .preview-table th, .preview-table td { padding: var(--space-1) var(--space-2); } }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="dashboard.html" class="logo"><div class="logo-icon">L</div><span class="logo-text">LendTrack</span></a>
+    <nav class="header-nav">
+      <a href="dashboard.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+      <a href="cliente-detalle.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Clientes</a>
+      <a href="prestamo-detalle.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M10 7v10l5-5-5-5z"/></svg>Prestamos</a>
+      <a href="pagos.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>Pagos</a>
+      <a href="capital.html" class="nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg>Capital</a>
+      <a href="#" class="nav-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Consolidado</a>
+    </nav>
+    <div class="header-right">
+      <button class="btn-icon notification-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></button>
+      <div class="avatar">SM</div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <div class="page-header animate-in stagger-1">
+    <h1 class="page-title">Consolidado de Pagos</h1>
+    <p class="page-subtitle">Genera reportes profesionales de tus cobros por periodo</p>
+  </div>
+
+  <!-- MAIN CARD -->
+  <div class="section-card animate-in stagger-2">
+    <div class="section-header">
+      <div class="section-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      </div>
+      <div>
+        <h2 class="section-title">Reporte de pagos por periodo</h2>
+        <p class="section-desc">Selecciona un rango de meses para generar un PDF con todos los pagos realizados. Puedes descargarlo o enviarlo por correo.</p>
+      </div>
+    </div>
+
+    <div class="form-content">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Desde mes</label>
+          <input type="month" class="form-input" value="2025-04">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Hasta mes</label>
+          <input type="month" class="form-input" value="2025-06">
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom: var(--space-5);">
+        <label class="form-label">Enviar a (opcional)</label>
+        <input type="email" class="form-input" placeholder="nombre@correo.com" value="contador@empresa.com">
+        <span class="form-hint">Solo necesario si quieres enviar el reporte por correo.</span>
+      </div>
+
+      <!-- PERIOD SUMMARY -->
+      <div class="period-summary">
+        <div class="period-summary-title">Resumen del periodo (Abr - Jun 2025)</div>
+        <div class="period-stats">
+          <div>
+            <div class="period-stat-value">$600.000</div>
+            <div class="period-stat-label">Total cobrado</div>
+          </div>
+          <div>
+            <div class="period-stat-value">5</div>
+            <div class="period-stat-label">Pagos realizados</div>
+          </div>
+          <div>
+            <div class="period-stat-value">3</div>
+            <div class="period-stat-label">Clientes involucrados</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREVIEW TABLE -->
+      <div class="preview-section">
+        <div class="preview-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Vista previa del reporte
+        </div>
+        <table class="preview-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Cliente</th>
+              <th>Prestamo</th>
+              <th>Cuota</th>
+              <th>Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>17 Jun 2025</td>
+              <td>Juan Perez</td>
+              <td>#003</td>
+              <td>4/10</td>
+              <td class="amount">$120.000</td>
+            </tr>
+            <tr>
+              <td>15 Jun 2025</td>
+              <td>Carlos Lopez</td>
+              <td>#002</td>
+              <td>3/6</td>
+              <td class="amount">$230.000</td>
+            </tr>
+            <tr>
+              <td>20 May 2025</td>
+              <td>Maria Rodriguez</td>
+              <td>#001</td>
+              <td>4/8</td>
+              <td class="amount">$120.000</td>
+            </tr>
+            <tr>
+              <td>15 Abr 2025</td>
+              <td>Juan Perez</td>
+              <td>#003</td>
+              <td>2/10</td>
+              <td class="amount">$120.000</td>
+            </tr>
+            <tr>
+              <td>10 Abr 2025</td>
+              <td>Carlos Lopez</td>
+              <td>#002</td>
+              <td>1/6</td>
+              <td class="amount">$230.000</td>
+            </tr>
+            <tr class="total-row">
+              <td colspan="4">Total del periodo</td>
+              <td class="amount" style="color: var(--brand-600);">$820.000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="actions">
+        <button class="btn btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar PDF
+        </button>
+        <button class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Enviar por correo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO -->
+  <div class="info-card animate-in stagger-3">
+    <div class="info-card-title">Que incluye el consolidado?</div>
+    <ul class="info-card-list">
+      <li>Todos los pagos marcados como realizados dentro del rango seleccionado.</li>
+      <li>Detalle por pago: cliente, prestamo, cuota, fecha de pago, tasa de interes y monto cobrado.</li>
+      <li>Totales: dinero cobrado, cantidad de pagos y clientes involucrados.</li>
+      <li>Formato PDF profesional listo para imprimir o enviar.</li>
+      <li>Opcion de enviar directamente al correo de tu contador o asesor.</li>
+    </ul>
+  </div>
+</main>
+
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="dashboard.html" class="bottom-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Inicio</span></a>
+    <a href="cliente-detalle.html" class="bottom-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>Clientes</span></a>
+    <a href="prestamo-detalle.html" class="bottom-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M10 7v10l5-5-5-5z"/></svg><span>Prestamos</span></a>
+    <a href="pagos.html" class="bottom-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Pagos</span></a>
+    <a href="capital.html" class="bottom-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg><span>Capital</span></a>
+    <a href="#" class="bottom-nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Reporte</span></a>
+  </div>
+</nav>
+
+<div class="mockup-badge">LendTrack V2 — Consolidado</div>
+</body>
+</html>

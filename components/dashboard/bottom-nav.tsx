@@ -26,7 +26,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 border-t border-[rgba(0,0,0,0.08)] bg-card sm:hidden"
+      className="fixed bottom-0 left-0 right-0 z-40 border-t border-[var(--border-subtle)] bg-[var(--surface-1)] sm:hidden"
       style={{ height: 64, paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="flex h-full items-stretch justify-around">
@@ -38,13 +38,13 @@ export function BottomNav() {
               href={item.href}
               className={cn(
                 "flex flex-1 flex-col items-center justify-center gap-0.5 transition-colors",
-                active ? "text-[#0F6E56]" : "text-secondary"
+                active ? "text-[var(--brand-500)]" : "text-[var(--text-tertiary-new)]"
               )}
             >
               <item.icon className="h-5 w-5" strokeWidth={active ? 2.25 : 1.75} />
               <span
                 className="text-[10px]"
-                style={{ fontWeight: active ? 500 : 400 }}
+                style={{ fontWeight: active ? 600 : 500 }}
               >
                 {item.label}
               </span>

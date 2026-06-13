@@ -1,11 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.985 0 0); /* gris muy suave, no blanco puro */
+  --background: oklch(0.985 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -21,10 +21,9 @@
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: rgba(0, 0, 0, 0.08); /* borde sutil estilo iOS/Linear */
+  --border: rgba(0, 0, 0, 0.08);
   --input: rgba(0, 0, 0, 0.12);
   --ring: oklch(0.708 0 0);
-  /* Colores de texto jerárquicos */
   --text-secondary: oklch(0.55 0 0);
   --text-tertiary: oklch(0.65 0 0);
   --chart-1: oklch(0.646 0.222 41.116);
@@ -32,7 +31,7 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.75rem; /* 12px cards */
+  --radius: 0.75rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -41,6 +40,91 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --brand-50: #E8F5EF;
+  --brand-100: #C5E6D3;
+  --brand-200: #9DD4B3;
+  --brand-300: #6EC08F;
+  --brand-400: #42AD72;
+  --brand-500: #0A6847;
+  --brand-600: #085538;
+  --brand-700: #06422B;
+  --brand-800: #04301F;
+  --brand-900: #021E13;
+  --ink-900: #1A1A2E;
+  --ink-800: #2D2D44;
+  --ink-700: #40405A;
+  --ink-600: #535370;
+  --ink-500: #666686;
+  --ink-400: #8585A0;
+  --ink-300: #A4A4BA;
+  --ink-200: #C3C3D4;
+  --ink-100: #E2E2EE;
+  --ink-50: #F0F0F7;
+  --cream-50: #FAF7F2;
+  --cream-100: #F5F0E8;
+  --cream-200: #EBE0D1;
+  --cream-300: #E1D0B9;
+  --cream-400: #D7C0A2;
+  --cream-500: #CDB08A;
+  --cream-600: #B89565;
+  --cream-700: #9A7A4F;
+  --cream-800: #7C603A;
+  --cream-900: #5E4624;
+  --surface-0: #FAF7F2;
+  --surface-1: #FFFFFF;
+  --surface-2: #F5F2ED;
+  --surface-3: #EBE8E3;
+  --border-subtle: rgba(26, 26, 46, 0.06);
+  --border-default: rgba(26, 26, 46, 0.10);
+  --border-strong: rgba(26, 26, 46, 0.16);
+  --text-primary: #1A1A2E;
+  --text-secondary-new: #666686;
+  --text-tertiary-new: #8585A0;
+  --text-placeholder: #A4A4BA;
+  --text-disabled: #C3C3D4;
+  --text-inverse: #FFFFFF;
+  --success-50: #E8F5EF;
+  --success-500: #0A6847;
+  --success-600: #085538;
+  --warning-50: #FFF8E6;
+  --warning-500: #E5A000;
+  --warning-600: #B88000;
+  --danger-50: #FDE8E8;
+  --danger-500: #DC3545;
+  --danger-600: #B02A37;
+  --info-50: #E6EFFE;
+  --info-500: #1E4FC4;
+  --info-600: #183F9D;
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-full: 9999px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --shadow-xs: 0 1px 2px rgba(26,26,46,0.04);
+  --shadow-sm: 0 2px 8px rgba(26,26,46,0.06);
+  --shadow-md: 0 4px 16px rgba(26,26,46,0.08);
+  --shadow-lg: 0 8px 32px rgba(26,26,46,0.10);
+  --shadow-xl: 0 16px 48px rgba(26,26,46,0.12);
+  --shadow-glow: 0 0 0 4px rgba(10,104,71,0.10);
+  --shadow-card: 0 2px 8px rgba(26,26,46,0.06), 0 0 1px rgba(26,26,46,0.08);
+  --shadow-card-hover: 0 4px 16px rgba(26,26,46,0.08), 0 0 1px rgba(26,26,46,0.08);
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .dark {
@@ -79,9 +163,9 @@
 }
 
 @theme inline {
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
-  --font-mono: "Geist Mono", "Geist Mono Fallback";
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -118,6 +202,16 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
 }
 
 @layer base {
@@ -166,4 +260,63 @@
 .animate-gradient-xy {
   animation: gradient-xy 3s ease infinite;
   background-size: 200% 200%;
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes clipReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Sparkline "draw" animation. Path must declare pathLength="1". */
+@keyframes drawLine {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+.animate-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: drawLine 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+@keyframes fadeInArea {
+  from { opacity: 0; }
+  to { opacity: 0.3; }
+}
+
+.animate-area {
+  opacity: 0;
+  animation: fadeInArea 1s ease 0.6s forwards;
+}
+
+.animate-in {
+  animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.stagger-1 { animation-delay: 0ms; }
+.stagger-2 { animation-delay: 60ms; }
+.stagger-3 { animation-delay: 120ms; }
+.stagger-4 { animation-delay: 180ms; }
+.stagger-5 { animation-delay: 240ms; }
+.stagger-6 { animation-delay: 300ms; }
+.stagger-7 { animation-delay: 360ms; }
+.stagger-8 { animation-delay: 420ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

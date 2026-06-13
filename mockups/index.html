@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LendTrack V2 — Mockup Gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand-500: #0A6847; --brand-600: #085A3B; --brand-700: #064C31; --brand-50: #E8F5EF; --brand-100: #C6E7D3;
+  --off-black: #1A1A2E; --text-secondary: #6B7280; --text-tertiary: #9CA3AF;
+  --border: rgba(0,0,0,0.06); --bg-base: #FAF7F2; --bg-subtle: #F5F1EB; --bg-card: #FFFFFF;
+  --danger-bg: #FEE2E2; --warning-bg: #FEF3C7;
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.03);
+  --shadow-xl: 0 8px 32px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+  --radius-md: 12px; --radius-lg: 16px; --radius-xl: 20px;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--bg-base); color: var(--off-black); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body::before { content: ''; position: fixed; inset: 0; background-image: radial-gradient(circle, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 24px 24px; pointer-events: none; z-index: 0; }
+
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.animate-in { animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.stagger-1 { animation-delay: 0ms; } .stagger-2 { animation-delay: 80ms; }
+.stagger-3 { animation-delay: 160ms; } .stagger-4 { animation-delay: 240ms; }
+.stagger-5 { animation-delay: 320ms; } .stagger-6 { animation-delay: 400ms; }
+.stagger-7 { animation-delay: 480ms; }
+
+.container { max-width: 960px; margin: 0 auto; padding: 64px 24px; position: relative; z-index: 1; }
+
+.hero { text-align: center; margin-bottom: 64px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--brand-50); color: var(--brand-600);
+  padding: 6px 16px; border-radius: 9999px;
+  font-size: 12px; font-weight: 600; margin-bottom: 24px;
+  animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brand-500); }
+.hero h1 {
+  font-family: var(--font-display); font-size: 48px; font-weight: 800;
+  line-height: 1.1; letter-spacing: -0.02em;
+  animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+}
+.hero h1 .accent {
+  background: linear-gradient(135deg, var(--brand-500), #4DB87C);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero p {
+  font-size: 16px; color: var(--text-secondary); margin-top: 16px; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.6;
+  animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+}
+
+/* Design tokens section */
+.tokens-section { margin-bottom: 48px; }
+.tokens-title { font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 20px; text-align: center; }
+.tokens-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.token-card {
+  background: var(--bg-card); border-radius: var(--radius-lg); padding: 24px;
+  box-shadow: var(--shadow-md); border: 1px solid var(--border);
+}
+.token-card-label { font-size: 11px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+.color-row { display: flex; gap: 6px; margin-bottom: 8px; }
+.color-swatch { width: 32px; height: 32px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.06); }
+.font-sample { font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+.font-sample-body { font-size: 14px; color: var(--text-secondary); }
+.shadow-demo { display: flex; gap: 12px; align-items: center; }
+.shadow-box { width: 40px; height: 40px; border-radius: 8px; background: var(--bg-card); border: 1px solid var(--border); }
+.shadow-box.sm { box-shadow: var(--shadow-md); }
+.shadow-box.md { box-shadow: var(--shadow-lg); }
+.shadow-box.lg { box-shadow: var(--shadow-xl); }
+
+/* Mockup cards */
+.mockups-grid { display: grid; gap: 24px; }
+.mockup-card {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  background: var(--bg-card); border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+  overflow: hidden; text-decoration: none; color: inherit;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mockup-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+.mockup-preview {
+  background: var(--bg-subtle); padding: 24px; display: flex;
+  align-items: center; justify-content: center; min-height: 240px;
+  position: relative; overflow: hidden;
+}
+.mockup-preview-img {
+  width: 100%; max-width: 360px; border-radius: 8px;
+  box-shadow: var(--shadow-lg); background: var(--bg-card);
+  overflow: hidden; border: 1px solid var(--border);
+}
+.mockup-preview-bar { height: 28px; background: var(--bg-subtle); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 10px; gap: 5px; }
+.mockup-preview-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(0,0,0,0.12); }
+.mockup-preview-content { padding: 12px; }
+.mockup-preview-line { height: 6px; border-radius: 3px; background: var(--border); margin-bottom: 6px; }
+.mockup-preview-line.short { width: 60%; }
+.mockup-preview-line.medium { width: 80%; }
+.mockup-preview-line.brand { background: var(--brand-100); }
+.mockup-preview-blocks { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+.mockup-preview-block { height: 24px; border-radius: 4px; background: var(--border); }
+.mockup-preview-block.brand { background: var(--brand-50); }
+
+.mockup-info { padding: 32px; display: flex; flex-direction: column; justify-content: center; }
+.mockup-number { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--brand-500); margin-bottom: 8px; }
+.mockup-title { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin-bottom: 8px; line-height: 1.2; }
+.mockup-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px; }
+.mockup-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.mockup-tag { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 9999px; background: var(--bg-subtle); color: var(--text-secondary); }
+.mockup-tag.highlight { background: var(--brand-50); color: var(--brand-600); }
+.mockup-cta { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--brand-500); }
+.mockup-cta svg { width: 16px; height: 16px; transition: transform 0.2s; }
+.mockup-card:hover .mockup-cta svg { transform: translateX(4px); }
+
+/* Footer */
+.footer { text-align: center; margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--border); }
+.footer p { font-size: 13px; color: var(--text-tertiary); }
+
+@media (max-width: 768px) {
+  .container { padding: 32px 16px; }
+  .hero h1 { font-size: 32px; }
+  .tokens-grid { grid-template-columns: 1fr; }
+  .mockup-card { grid-template-columns: 1fr; }
+  .mockup-preview { min-height: 180px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge"><span class="hero-badge-dot"></span>Mockup Preview</div>
+    <h1>LendTrack <span class="accent">V2</span></h1>
+    <p>Rediseño completo de la interfaz: nueva identidad visual, profundidad, motion, y nuevas funcionalidades para una mejor experiencia de gestion de prestamos.</p>
+  </div>
+
+  <!-- DESIGN TOKENS -->
+  <div class="tokens-section animate-in stagger-1">
+    <div class="tokens-title">Design System</div>
+    <div class="tokens-grid">
+      <div class="token-card">
+        <div class="token-card-label">Colores</div>
+        <div class="color-row">
+          <div class="color-swatch" style="background: #02301D;" title="Brand 900"></div>
+          <div class="color-swatch" style="background: #064C31;" title="Brand 700"></div>
+          <div class="color-swatch" style="background: #0A6847;" title="Brand 500"></div>
+          <div class="color-swatch" style="background: #1A9D5E;" title="Brand 400"></div>
+          <div class="color-swatch" style="background: #8FD4AC;" title="Brand 200"></div>
+          <div class="color-swatch" style="background: #E8F5EF;" title="Brand 50"></div>
+        </div>
+        <div class="color-row" style="margin-top: 8px;">
+          <div class="color-swatch" style="background: #1A1A2E;" title="Off-black"></div>
+          <div class="color-swatch" style="background: #6B7280;" title="Secondary"></div>
+          <div class="color-swatch" style="background: #9CA3AF;" title="Tertiary"></div>
+          <div class="color-swatch" style="background: #FAF7F2;" title="Base bg"></div>
+          <div class="color-swatch" style="background: #DC2626;" title="Danger"></div>
+          <div class="color-swatch" style="background: #B45309;" title="Warning"></div>
+        </div>
+      </div>
+      <div class="token-card">
+        <div class="token-card-label">Tipografia</div>
+        <div class="font-sample">Plus Jakarta Sans</div>
+        <div class="font-sample-body">Inter para cuerpo de texto</div>
+        <div style="margin-top: 12px; font-size: 11px; color: var(--text-tertiary);">Escala: 1.333 — Base 14px</div>
+      </div>
+      <div class="token-card">
+        <div class="token-card-label">Sombras</div>
+        <div class="shadow-demo">
+          <div class="shadow-box sm"></div>
+          <div class="shadow-box md"></div>
+          <div class="shadow-box lg"></div>
+          <div style="font-size: 11px; color: var(--text-tertiary); line-height: 1.4;">sm<br>md<br>lg</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOCKUPS -->
+  <div class="mockups-grid">
+    <!-- Dashboard -->
+    <a href="dashboard.html" class="mockup-card animate-in stagger-2">
+      <div class="mockup-preview">
+        <div class="mockup-preview-img">
+          <div class="mockup-preview-bar">
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+          </div>
+          <div class="mockup-preview-content">
+            <div class="mockup-preview-line short brand"></div>
+            <div class="mockup-preview-line medium"></div>
+            <div class="mockup-preview-blocks">
+              <div class="mockup-preview-block brand" style="height: 48px;"></div>
+              <div class="mockup-preview-block"></div>
+              <div class="mockup-preview-block"></div>
+              <div class="mockup-preview-block"></div>
+            </div>
+            <div style="margin-top: 8px; height: 40px; border-radius: 6px; background: var(--border);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-info">
+        <div class="mockup-number">01</div>
+        <div class="mockup-title">Dashboard</div>
+        <div class="mockup-desc">Bento grid con stat cards, grafico de ganancias, proximos vencimientos, top clientes y actividad reciente. Animaciones de entrada y contadores.</div>
+        <div class="mockup-tags">
+          <span class="mockup-tag highlight">Bento Grid</span>
+          <span class="mockup-tag">Count-up</span>
+          <span class="mockup-tag">Sparkline</span>
+          <span class="mockup-tag">Timeline</span>
+        </div>
+        <div class="mockup-cta">
+          Ver mockup
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Client Detail -->
+    <a href="cliente-detalle.html" class="mockup-card animate-in stagger-3">
+      <div class="mockup-preview">
+        <div class="mockup-preview-img">
+          <div class="mockup-preview-bar">
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+          </div>
+          <div class="mockup-preview-content">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+              <div style="width: 28px; height: 28px; border-radius: 8px; background: var(--brand-50);"></div>
+              <div>
+                <div class="mockup-preview-line" style="width: 80px; margin-bottom: 3px;"></div>
+                <div class="mockup-preview-line" style="width: 120px; height: 4px;"></div>
+              </div>
+            </div>
+            <div class="mockup-preview-blocks" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 8px;">
+              <div class="mockup-preview-block brand"></div>
+              <div class="mockup-preview-block"></div>
+              <div class="mockup-preview-block"></div>
+              <div class="mockup-preview-block"></div>
+            </div>
+            <div style="height: 32px; border-radius: 6px; background: var(--border); margin-bottom: 6px;"></div>
+            <div style="height: 32px; border-radius: 6px; background: var(--border);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-info">
+        <div class="mockup-number">02</div>
+        <div class="mockup-title">Detalle de Cliente</div>
+        <div class="mockup-desc">Perfil completo con stats, tabla de prestamos activos con progreso, timeline de actividad y notas. Breadcrumb para navegacion.</div>
+        <div class="mockup-tags">
+          <span class="mockup-tag highlight">Perfil</span>
+          <span class="mockup-tag">Progreso</span>
+          <span class="mockup-tag">Timeline</span>
+          <span class="mockup-tag">Notas</span>
+        </div>
+        <div class="mockup-cta">
+          Ver mockup
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Loan Detail -->
+    <a href="prestamo-detalle.html" class="mockup-card animate-in stagger-4">
+      <div class="mockup-preview">
+        <div class="mockup-preview-img">
+          <div class="mockup-preview-bar">
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+          </div>
+          <div class="mockup-preview-content">
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+              <div style="flex: 1;">
+                <div class="mockup-preview-line short"></div>
+                <div class="mockup-preview-line" style="width: 100px; height: 10px; background: var(--off-black); border-radius: 2px; margin-top: 4px;"></div>
+              </div>
+              <div style="width: 48px; height: 48px; border-radius: 50%; border: 3px solid var(--brand-500);"></div>
+            </div>
+            <div class="mockup-preview-blocks" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 8px;">
+              <div class="mockup-preview-block"></div>
+              <div class="mockup-preview-block"></div>
+              <div class="mockup-preview-block brand"></div>
+              <div class="mockup-preview-block"></div>
+            </div>
+            <div style="height: 20px; border-radius: 4px; background: var(--brand-50); margin-bottom: 4px;"></div>
+            <div style="height: 20px; border-radius: 4px; background: var(--border); margin-bottom: 4px;"></div>
+            <div style="height: 20px; border-radius: 4px; background: var(--border);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-info">
+        <div class="mockup-number">03</div>
+        <div class="mockup-title">Detalle de Prestamo</div>
+        <div class="mockup-desc">Vista completa con progress ring, tabla de amortizacion interactiva, estados visuales por cuota, y seccion de notas. Boton de marcar pagado inline.</div>
+        <div class="mockup-tags">
+          <span class="mockup-tag highlight">Amortizacion</span>
+          <span class="mockup-tag">Progress Ring</span>
+          <span class="mockup-tag">Inline Actions</span>
+          <span class="mockup-tag">Notas</span>
+        </div>
+        <div class="mockup-cta">
+          Ver mockup
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Pagos -->
+    <a href="pagos.html" class="mockup-card animate-in stagger-5">
+      <div class="mockup-preview">
+        <div class="mockup-preview-img">
+          <div class="mockup-preview-bar">
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+          </div>
+          <div class="mockup-preview-content">
+            <div class="mockup-preview-blocks" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 8px;">
+              <div class="mockup-preview-block" style="background: var(--warning-bg);"></div>
+              <div class="mockup-preview-block brand"></div>
+              <div class="mockup-preview-block" style="background: var(--danger-bg);"></div>
+            </div>
+            <div style="height: 8px; border-radius: 4px; background: var(--border); margin-bottom: 8px;"></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+              <div style="height: 48px; border-radius: 6px; background: var(--border); border-left: 3px solid var(--danger);"></div>
+              <div style="height: 48px; border-radius: 6px; background: var(--border); border-left: 3px solid var(--warning);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-info">
+        <div class="mockup-number">04</div>
+        <div class="mockup-title">Pagos</div>
+        <div class="mockup-desc">Control de pagos pendientes y completados con tabs. Cards con estados visuales (vencido, proximo, al dia) y accion inline de marcar pagado.</div>
+        <div class="mockup-tags">
+          <span class="mockup-tag highlight">Tabs</span>
+          <span class="mockup-tag">Estados</span>
+          <span class="mockup-tag">Alertas</span>
+          <span class="mockup-tag">Inline Actions</span>
+        </div>
+        <div class="mockup-cta">
+          Ver mockup
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Capital -->
+    <a href="capital.html" class="mockup-card animate-in stagger-6">
+      <div class="mockup-preview">
+        <div class="mockup-preview-img">
+          <div class="mockup-preview-bar">
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+          </div>
+          <div class="mockup-preview-content">
+            <div style="height: 56px; border-radius: 8px; background: linear-gradient(135deg, var(--brand-700), var(--brand-500)); margin-bottom: 8px; position: relative; overflow: hidden;">
+              <div style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.4);"></div>
+            </div>
+            <div class="mockup-preview-blocks" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 8px;">
+              <div class="mockup-preview-block"></div>
+              <div class="mockup-preview-block brand"></div>
+              <div class="mockup-preview-block" style="background: var(--warning-bg);"></div>
+            </div>
+            <div style="height: 32px; border-radius: 6px; background: var(--border);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-info">
+        <div class="mockup-number">05</div>
+        <div class="mockup-title">Capital</div>
+        <div class="mockup-desc">Hero card con gradiente y sparkline, stats de capital inicial/ganancias/prestado, grafico de evolucion e historial de movimientos.</div>
+        <div class="mockup-tags">
+          <span class="mockup-tag highlight">Hero Card</span>
+          <span class="mockup-tag">Grafico</span>
+          <span class="mockup-tag">Movimientos</span>
+          <span class="mockup-tag">Sparkline</span>
+        </div>
+        <div class="mockup-cta">
+          Ver mockup
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Consolidado -->
+    <a href="consolidado.html" class="mockup-card animate-in stagger-7">
+      <div class="mockup-preview">
+        <div class="mockup-preview-img">
+          <div class="mockup-preview-bar">
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+          </div>
+          <div class="mockup-preview-content">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+              <div style="width: 28px; height: 28px; border-radius: 8px; background: var(--brand-50);"></div>
+              <div>
+                <div class="mockup-preview-line" style="width: 100px; margin-bottom: 3px;"></div>
+                <div class="mockup-preview-line" style="width: 140px; height: 4px;"></div>
+              </div>
+            </div>
+            <div class="mockup-preview-blocks" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 8px;">
+              <div class="mockup-preview-block brand"></div>
+              <div class="mockup-preview-block"></div>
+              <div class="mockup-preview-block"></div>
+            </div>
+            <div style="height: 16px; border-radius: 4px; background: var(--border); margin-bottom: 4px;"></div>
+            <div style="height: 16px; border-radius: 4px; background: var(--border); margin-bottom: 4px;"></div>
+            <div style="height: 16px; border-radius: 4px; background: var(--brand-50);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-info">
+        <div class="mockup-number">06</div>
+        <div class="mockup-title">Consolidado</div>
+        <div class="mockup-desc">Generador de reportes PDF con selector de periodo, preview de la tabla de pagos, resumen del periodo y opciones de descarga o envio por email.</div>
+        <div class="mockup-tags">
+          <span class="mockup-tag highlight">Reportes</span>
+          <span class="mockup-tag">PDF</span>
+          <span class="mockup-tag">Preview</span>
+          <span class="mockup-tag">Email</span>
+        </div>
+        <div class="mockup-cta">
+          Ver mockup
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Login -->
+    <a href="login.html" class="mockup-card animate-in stagger-1">
+      <div class="mockup-preview">
+        <div class="mockup-preview-img">
+          <div class="mockup-preview-bar">
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+          </div>
+          <div class="mockup-preview-content">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; min-height: 160px;">
+              <div style="background: linear-gradient(135deg, var(--brand-700), var(--brand-500)); border-radius: 4px 0 0 4px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(255,255,255,0.2);"></div>
+              </div>
+              <div style="padding: 8px;">
+                <div class="mockup-preview-line" style="width: 70%; height: 8px; background: var(--off-black); border-radius: 2px; margin-bottom: 6px;"></div>
+                <div class="mockup-preview-line" style="width: 90%; margin-bottom: 8px;"></div>
+                <div class="mockup-preview-line" style="width: 100%; height: 16px; border-radius: 3px; margin-bottom: 6px;"></div>
+                <div class="mockup-preview-line" style="width: 100%; height: 16px; border-radius: 3px; margin-bottom: 8px;"></div>
+                <div style="height: 14px; border-radius: 3px; background: var(--brand-500);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-info">
+        <div class="mockup-number">07</div>
+        <div class="mockup-title">Login</div>
+        <div class="mockup-desc">Split layout 50/50 con panel de branding (gradiente verde + stats) y formulario con iconos, focus ring verde y animacion de entrada escalonada.</div>
+        <div class="mockup-tags">
+          <span class="mockup-tag highlight">Split Layout</span>
+          <span class="mockup-tag">Branding</span>
+          <span class="mockup-tag">Form</span>
+          <span class="mockup-tag">Responsive</span>
+        </div>
+        <div class="mockup-cta">
+          Ver mockup
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Signup -->
+    <a href="signup.html" class="mockup-card animate-in stagger-2">
+      <div class="mockup-preview">
+        <div class="mockup-preview-img">
+          <div class="mockup-preview-bar">
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+          </div>
+          <div class="mockup-preview-content">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0; min-height: 160px;">
+              <div style="background: linear-gradient(135deg, var(--brand-700), var(--brand-500)); border-radius: 4px 0 0 4px; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 24px; height: 24px; border-radius: 6px; background: rgba(255,255,255,0.2);"></div>
+              </div>
+              <div style="padding: 8px;">
+                <div class="mockup-preview-line" style="width: 60%; height: 8px; background: var(--off-black); border-radius: 2px; margin-bottom: 6px;"></div>
+                <div class="mockup-preview-line" style="width: 85%; margin-bottom: 8px;"></div>
+                <div class="mockup-preview-line" style="width: 100%; height: 14px; border-radius: 3px; margin-bottom: 5px;"></div>
+                <div class="mockup-preview-line" style="width: 100%; height: 14px; border-radius: 3px; margin-bottom: 5px;"></div>
+                <div style="display: flex; gap: 3px; margin-bottom: 5px;">
+                  <div style="flex:1; height: 3px; border-radius: 2px; background: var(--brand-500);"></div>
+                  <div style="flex:1; height: 3px; border-radius: 2px; background: var(--brand-500);"></div>
+                  <div style="flex:1; height: 3px; border-radius: 2px; background: var(--border);"></div>
+                  <div style="flex:1; height: 3px; border-radius: 2px; background: var(--border);"></div>
+                </div>
+                <div class="mockup-preview-line" style="width: 100%; height: 14px; border-radius: 3px; margin-bottom: 6px;"></div>
+                <div style="height: 14px; border-radius: 3px; background: var(--brand-500);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-info">
+        <div class="mockup-number">08</div>
+        <div class="mockup-title">Sign Up</div>
+        <div class="mockup-desc">Mismo split layout que login con indicador de fuerza de contrasena (4 barras), validacion de coincidencia y link a login.</div>
+        <div class="mockup-tags">
+          <span class="mockup-tag highlight">Password Strength</span>
+          <span class="mockup-tag">Validacion</span>
+          <span class="mockup-tag">Form</span>
+          <span class="mockup-tag">Responsive</span>
+        </div>
+        <div class="mockup-cta">
+          Ver mockup
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Admin -->
+    <a href="admin.html" class="mockup-card animate-in stagger-3">
+      <div class="mockup-preview">
+        <div class="mockup-preview-img">
+          <div class="mockup-preview-bar">
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+            <div class="mockup-preview-dot"></div>
+          </div>
+          <div class="mockup-preview-content">
+            <div class="mockup-preview-blocks" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 8px;">
+              <div class="mockup-preview-block brand" style="height: 36px;"></div>
+              <div class="mockup-preview-block" style="height: 36px;"></div>
+              <div class="mockup-preview-block" style="height: 36px; background: var(--warning-bg);"></div>
+            </div>
+            <div style="height: 14px; border-radius: 3px; background: var(--border); width: 50%; margin-bottom: 8px;"></div>
+            <div style="height: 16px; border-radius: 3px; background: var(--border); margin-bottom: 4px;"></div>
+            <div style="height: 16px; border-radius: 3px; background: var(--border); margin-bottom: 4px;"></div>
+            <div style="height: 16px; border-radius: 3px; background: var(--brand-50);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="mockup-info">
+        <div class="mockup-number">09</div>
+        <div class="mockup-title">Admin</div>
+        <div class="mockup-desc">Panel de administracion con stat cards (total, activos, inactivos), buscador, tabla de usuarios con avatares, badges de rol y modal de confirmacion para eliminar.</div>
+        <div class="mockup-tags">
+          <span class="mockup-tag highlight">Stats</span>
+          <span class="mockup-tag">Tabla</span>
+          <span class="mockup-tag">Avatares</span>
+          <span class="mockup-tag">Modal</span>
+        </div>
+        <div class="mockup-cta">
+          Ver mockup
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer animate-in stagger-7">
+    <p>LendTrack V2 — 9 mockups de diseno. Navega entre pantallas haciendo clic en cada tarjeta.</p>
+  </div>
+</div>
+
+</body>
+</html>

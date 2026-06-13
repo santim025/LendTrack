@@ -2,62 +2,50 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 
+/**
+ * POST /api/auth/register — Register a new user.
+ * @body { email: string, password: string }
+ * Creates user with initial capital of 0.
+ */
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json()
 
-    if (!email || !password) {
+    if (!email?.trim() || !password) {
       return NextResponse.json(
-        { error: "Email y contraseña son requeridos" },
+        { error: "Email and password are required" },
         { status: 400 }
       )
     }
 
     if (password.length < 6) {
       return NextResponse.json(
-        { error: "La contraseña debe tener al menos 6 caracteres" },
+        { error: "Password must be at least 6 characters" },
         { status: 400 }
       )
     }
 
-    // Check if user already exists
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: { email: email.trim() },
     })
 
     if (existingUser) {
-      return NextResponse.json(
-        { error: "El usuario ya existe" },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: "User already exists" }, { status: 400 })
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 12)
 
-    // Create user with initial capital
     const user = await prisma.user.create({
       data: {
-        email,
+        email: email.trim(),
         password: hashedPassword,
-        capital: {
-          create: {
-            currentCapital: 0,
-            initialCapital: 0,
-          },
-        },
+        capital: { create: { currentCapital: 0, initialCapital: 0 } },
       },
     })
 
-    return NextResponse.json({
-      message: "Usuario creado exitosamente",
-      userId: user.id,
-    })
+    return NextResponse.json({ message: "User created successfully", userId: user.id }, { status: 201 })
   } catch (error) {
     console.error("Registration error:", error)
-    return NextResponse.json(
-      { error: "Error al crear el usuario" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to create user" }, { status: 500 })
   }
 }

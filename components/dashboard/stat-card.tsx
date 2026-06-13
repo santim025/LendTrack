@@ -1,15 +1,14 @@
 import type { LucideIcon } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
 export type StatTone = "emerald" | "red" | "blue" | "amber" | "neutral";
 
 const toneStyles: Record<StatTone, { bg: string; fg: string }> = {
-  emerald: { bg: "bg-[#E1F5EE]", fg: "text-[#0F6E56]" },
-  red: { bg: "bg-[#FDECEC]", fg: "text-[#B3261E]" },
-  blue: { bg: "bg-[#E6EFFE]", fg: "text-[#1E4FC4]" },
-  amber: { bg: "bg-[#FDF1DC]", fg: "text-[#A06410]" },
-  neutral: { bg: "bg-[#F0F0F0]", fg: "text-[#4A4A4A]" },
+  emerald: { bg: "bg-[var(--brand-50)]", fg: "text-[var(--brand-500)]" },
+  red: { bg: "bg-[var(--danger-50)]", fg: "text-[var(--danger-500)]" },
+  blue: { bg: "bg-[var(--info-50)]", fg: "text-[var(--info-500)]" },
+  amber: { bg: "bg-[var(--warning-50)]", fg: "text-[var(--warning-500)]" },
+  neutral: { bg: "bg-[var(--ink-50)]", fg: "text-[var(--ink-500)]" },
 };
 
 interface StatCardProps {
@@ -18,6 +17,8 @@ interface StatCardProps {
   subtitle?: string;
   icon: LucideIcon;
   tone?: StatTone;
+  highlight?: boolean;
+  className?: string;
 }
 
 export function StatCard({
@@ -26,43 +27,61 @@ export function StatCard({
   subtitle,
   icon: Icon,
   tone = "neutral",
+  highlight = false,
+  className,
 }: StatCardProps) {
   const styles = toneStyles[tone];
   return (
-    <Card className="gap-0 py-4">
-      <div className="px-4">
+    <div
+      className={cn(
+        "rounded-[var(--radius-lg)] bg-[var(--surface-1)] p-5 transition-shadow hover:shadow-[var(--shadow-md)]",
+        highlight && "bg-[var(--brand-500)] text-white",
+        className
+      )}
+      style={{ boxShadow: "var(--shadow-card)" }}
+    >
+      <div className="flex items-start justify-between">
         <div
           className={cn(
             "flex items-center justify-center rounded-full",
-            styles.bg
+            styles.bg,
+            styles.fg,
+            highlight && "bg-white/20 text-white"
           )}
-          style={{ width: 36, height: 36 }}
+          style={{ width: 40, height: 40 }}
         >
-          <Icon className={cn("h-4 w-4", styles.fg)} strokeWidth={2} />
+          <Icon className="h-5 w-5" strokeWidth={2} />
         </div>
       </div>
-      <div className="mt-3 px-4">
+      <div className="mt-4">
         <p
-          className="text-secondary"
-          style={{ fontSize: 12, fontWeight: 400 }}
+          className={cn(
+            "text-[12px] font-medium uppercase tracking-wider",
+            highlight ? "text-white/70" : "text-[var(--text-tertiary-new)]"
+          )}
         >
           {label}
         </p>
         <p
-          className="tabular-nums mt-0.5"
-          style={{ fontSize: 22, fontWeight: 500, lineHeight: 1.2 }}
+          className={cn(
+            "tabular-nums mt-1 font-display",
+            highlight ? "text-white" : "text-[var(--text-primary)]"
+          )}
+          style={{ fontSize: 28, fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}
         >
           {value}
         </p>
         {subtitle ? (
           <p
-            className="text-tertiary mt-1"
-            style={{ fontSize: 11, fontWeight: 400 }}
+            className={cn(
+              "mt-1 text-[11px]",
+              highlight ? "text-white/60" : "text-[var(--text-tertiary-new)]"
+            )}
           >
             {subtitle}
           </p>
         ) : null}
       </div>
-    </Card>
+    </div>
   );
 }

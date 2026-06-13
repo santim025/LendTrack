@@ -1,22 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-} from "recharts";
-import { Wallet, HandCoins, TrendingUp, Activity, LineChart as LineChartIcon } from "lucide-react";
+import { Wallet, HandCoins, TrendingUp, Activity } from "lucide-react";
 import { DashboardNav } from "@/components/dashboard/dashboard-nav";
 import { BottomNav } from "@/components/dashboard/bottom-nav";
-import { StatCard } from "@/components/dashboard/stat-card";
-import { PageHeader } from "@/components/dashboard/page-header";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { EarningsChart } from "@/components/dashboard/earnings-chart";
+import { UpcomingPayments } from "@/components/dashboard/upcoming-payments";
+import { TopClients } from "@/components/dashboard/top-clients";
+import { ActivityTimeline } from "@/components/dashboard/activity-timeline";
+import { ProgressRing } from "@/components/dashboard/progress-ring";
+import { CountUp } from "@/components/dashboard/count-up";
 
 interface CapitalData {
   current_capital: number;
@@ -28,27 +21,51 @@ interface MonthlyData {
   earnings: number;
 }
 
+interface UpcomingPayment {
+  id: string;
+  clientName: string;
+  amount: number;
+  dueDate: string;
+  loanId: string;
+}
+
+interface TopClient {
+  id: string;
+  name: string;
+  totalLoans: number;
+  totalPaid: number;
+}
+
+interface ActivityItem {
+  id: string;
+  type: "payment" | "loan" | "client";
+  description: string;
+  amount?: number;
+  timestamp: string;
+}
+
 interface DashboardData {
   capital: CapitalData;
   totalLent: number;
   monthlyData: MonthlyData[];
   totalInterests: number;
+  upcomingPayments: UpcomingPayment[];
+  topClients: TopClient[];
+  activities: ActivityItem[];
+  collectionRate: number;
 }
 
 function formatCOP(value: number) {
-  return `$${value.toLocaleString("es-CO", { minimumFractionDigits: 0 })}`;
+  return `$${Math.round(value).toLocaleString("es-CO")}`;
 }
 
-function formatShortCurrency(value: number) {
-  if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(1)}M`;
-  if (value >= 1_000) return `$${(value / 1_000).toFixed(0)}k`;
-  return `$${value}`;
+function formatPercent(value: number) {
+  return `${value.toFixed(1)}%`;
 }
 
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,7 +87,7 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <p className="text-secondary text-sm">Cargando...</p>
+        <p className="text-[var(--text-secondary-new)] text-sm">Cargando...</p>
       </div>
     );
   }
@@ -79,6 +96,10 @@ export default function DashboardPage() {
   const totalLent = data?.totalLent || 0;
   const monthlyData = data?.monthlyData || [];
   const totalEarnings = monthlyData.reduce((sum, m) => sum + m.earnings, 0);
+  const upcomingPayments = data?.upcomingPayments || [];
+  const topClients = data?.topClients || [];
+  const activities = data?.activities || [];
+  const collectionRate = data?.collectionRate || 0;
 
   const growthPercentage = capital?.initial_capital
     ? ((capital.current_capital - capital.initial_capital) /
@@ -89,135 +110,166 @@ export default function DashboardPage() {
   const availableCapital = (capital?.current_capital || 0) - totalLent;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[var(--surface-0)]">
       <DashboardNav />
       <main className="flex-1">
-        <div className="space-y-4 p-4 sm:p-6 max-w-7xl mx-auto">
-          <PageHeader title="Dashboard" />
-
-          <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
-            <StatCard
-              label="Capital Disponible"
-              value={formatCOP(availableCapital)}
-              subtitle="Dinero en caja"
-              icon={Wallet}
-              tone="emerald"
-            />
-            <StatCard
-              label="Capital Prestado"
-              value={formatCOP(totalLent)}
-              subtitle="En manos de clientes"
-              icon={HandCoins}
-              tone="red"
-            />
-            <StatCard
-              label="Ganancias Totales"
-              value={formatCOP(totalEarnings)}
-              subtitle="Intereses generados"
-              icon={TrendingUp}
-              tone="blue"
-            />
-            <StatCard
-              label="Crecimiento"
-              value={`${growthPercentage.toFixed(1)}%`}
-              subtitle="Desde capital inicial"
-              icon={Activity}
-              tone="amber"
-            />
+        <div className="p-4 sm:p-6 max-w-7xl mx-auto">
+          {/* Hero Section */}
+          <div className="mb-8 animate-in stagger-1">
+            <p className="text-[13px] text-[var(--text-secondary-new)] font-medium mb-2">
+              Buenos días, Santiago
+            </p>
+            <h1 className="font-display text-[36px] sm:text-[42px] font-extrabold text-[var(--text-primary)] leading-[1.1] tracking-[-0.02em]">
+              Tu negocio de{" "}
+              <span className="bg-gradient-to-r from-[var(--brand-500)] to-[var(--brand-400)] bg-clip-text text-transparent">
+                prestamos
+              </span>{" "}
+              en orden.
+            </h1>
+            <p className="text-[15px] text-[var(--text-secondary-new)] mt-2">
+              Tienes {upcomingPayments.length} pagos pendientes y {topClients.length} prestamos activos.
+            </p>
           </div>
 
-          <Card className="gap-3 py-4 sm:py-6 sm:gap-6">
-            <CardHeader className="pb-0 px-4 sm:px-6">
-              <CardTitle
-                className="text-[14px]"
-                style={{ fontWeight: 500 }}
-              >
-                Ganancias Mensuales
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pb-0 px-2 sm:px-6">
-              {monthlyData.length === 0 ? (
-                <div
-                  className="flex flex-col items-center justify-center text-center px-4 py-6 sm:py-10"
-                >
-                  <div
-                    className="flex items-center justify-center rounded-full bg-[#F0F0F0]"
-                    style={{ width: 44, height: 44 }}
-                  >
-                    <LineChartIcon
-                      className="h-5 w-5 text-[#8A8A8A]"
-                      strokeWidth={1.75}
-                    />
-                  </div>
-                  <p className="mt-3" style={{ fontSize: 13, fontWeight: 500 }}>
-                    Aún no hay datos
-                  </p>
-                  <p
-                    className="text-secondary mt-1 max-w-xs"
-                    style={{ fontSize: 12 }}
-                  >
-                    Cuando marques pagos como realizados verás la evolución
-                    mensual aquí.
-                  </p>
+          {/* Bento Grid Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            {/* Main Card - Capital Disponible */}
+            <div className="md:row-span-2 rounded-[var(--radius-lg)] bg-gradient-to-br from-[var(--brand-700)] to-[var(--brand-500)] p-6 text-white relative overflow-hidden animate-in stagger-2" style={{ boxShadow: "var(--shadow-lg)" }}>
+              <div className="flex items-start justify-between mb-6">
+                <div className="w-10 h-10 rounded-[var(--radius-md)] bg-white/15 flex items-center justify-center">
+                  <Wallet className="w-5 h-5 text-white" strokeWidth={2} />
                 </div>
-              ) : (
-                <ResponsiveContainer
-                  width="100%"
-                  height={isMobile ? 180 : 260}
-                >
-                  <LineChart
-                    data={monthlyData}
-                    margin={
-                      isMobile
-                        ? { top: 8, right: 8, left: -16, bottom: 0 }
-                        : { top: 8, right: 16, left: 0, bottom: 0 }
-                    }
-                  >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#eeeeee" />
-                    <XAxis
-                      dataKey="month"
-                      tick={{ fill: "#8A8A8A", fontSize: isMobile ? 10 : 11 }}
-                      axisLine={{ stroke: "#eeeeee" }}
-                      tickLine={false}
-                      interval="preserveStartEnd"
-                      minTickGap={isMobile ? 16 : 8}
-                    />
-                    <YAxis
-                      tick={{ fill: "#8A8A8A", fontSize: isMobile ? 10 : 11 }}
-                      axisLine={{ stroke: "#eeeeee" }}
-                      tickLine={false}
-                      width={isMobile ? 40 : 60}
-                      tickFormatter={
-                        isMobile
-                          ? formatShortCurrency
-                          : (value) => `$${value.toLocaleString()}`
-                      }
-                    />
-                    <Tooltip
-                      formatter={(value) =>
-                        `$${Number(value).toLocaleString("es-CO")}`
-                      }
-                      contentStyle={{
-                        backgroundColor: "white",
-                        border: "1px solid rgba(0,0,0,0.08)",
-                        borderRadius: "8px",
-                        fontSize: 12,
-                      }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="earnings"
-                      stroke="#1E4FC4"
-                      strokeWidth={2}
-                      name="Ganancias"
-                      dot={{ fill: "#1E4FC4", strokeWidth: 2, r: 3 }}
-                      activeDot={{ r: 5, fill: "#1E4FC4" }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              )}
-            </CardContent>
-          </Card>
+                <div className="px-2.5 py-1 rounded-full bg-white/15 text-[11px] font-semibold">
+                  +{growthPercentage.toFixed(1)}%
+                </div>
+              </div>
+              <CountUp
+                value={availableCapital}
+                format={formatCOP}
+                delayMs={200}
+                className="block font-display text-[42px] font-bold leading-[1.1] tracking-[-0.01em] mb-2"
+              />
+              <p className="text-[14px] font-medium text-white/80 mb-1">
+                Capital Disponible
+              </p>
+              <p className="text-[12px] text-white/60">
+                Dinero en caja para nuevos prestamos
+              </p>
+              {/* Sparkline placeholder */}
+              <div className="mt-6 h-12 relative">
+                <svg className="w-full h-full" viewBox="0 0 200 48" preserveAspectRatio="none">
+                  <path
+                    d="M0,40 Q20,35 40,32 T80,28 T120,20 T160,15 T200,10"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.6)"
+                    strokeWidth="2"
+                    pathLength={1}
+                    className="animate-draw"
+                  />
+                  <path
+                    d="M0,40 Q20,35 40,32 T80,28 T120,20 T160,15 T200,10 L200,48 L0,48 Z"
+                    fill="url(#sparkline-gradient)"
+                    className="animate-area"
+                  />
+                  <defs>
+                    <linearGradient id="sparkline-gradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="white" stopOpacity="0.4" />
+                      <stop offset="100%" stopColor="white" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+            </div>
+
+            {/* Capital Prestado */}
+            <div className="rounded-[var(--radius-lg)] bg-[var(--surface-1)] p-5 animate-in stagger-3" style={{ boxShadow: "var(--shadow-card)" }}>
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-10 h-10 rounded-[var(--radius-md)] bg-[var(--danger-50)] flex items-center justify-center">
+                  <HandCoins className="w-5 h-5 text-[var(--danger-500)]" strokeWidth={2} />
+                </div>
+              </div>
+              <CountUp
+                value={totalLent}
+                format={formatCOP}
+                delayMs={260}
+                className="block font-display text-[28px] font-bold text-[var(--text-primary)] leading-[1.1] tracking-[-0.01em] mb-1"
+              />
+              <p className="text-[13px] font-medium text-[var(--text-secondary-new)] mb-1">
+                Capital Prestado
+              </p>
+              <p className="text-[11px] text-[var(--text-tertiary-new)]">
+                En manos de {topClients.length} clientes
+              </p>
+            </div>
+
+            {/* Ganancias Totales */}
+            <div className="rounded-[var(--radius-lg)] bg-[var(--surface-1)] p-5 animate-in stagger-4" style={{ boxShadow: "var(--shadow-card)" }}>
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-10 h-10 rounded-[var(--radius-md)] bg-[var(--info-50)] flex items-center justify-center">
+                  <TrendingUp className="w-5 h-5 text-[var(--info-500)]" strokeWidth={2} />
+                </div>
+                <div className="px-2 py-0.5 rounded-full bg-[var(--success-50)] text-[11px] font-semibold text-[var(--success-500)]">
+                  +8.2%
+                </div>
+              </div>
+              <CountUp
+                value={totalEarnings}
+                format={formatCOP}
+                delayMs={320}
+                className="block font-display text-[28px] font-bold text-[var(--text-primary)] leading-[1.1] tracking-[-0.01em] mb-1"
+              />
+              <p className="text-[13px] font-medium text-[var(--text-secondary-new)] mb-1">
+                Ganancias Totales
+              </p>
+              <p className="text-[11px] text-[var(--text-tertiary-new)]">
+                Intereses generados
+              </p>
+            </div>
+
+            {/* Crecimiento */}
+            <div className="rounded-[var(--radius-lg)] bg-[var(--surface-1)] p-5 animate-in stagger-5" style={{ boxShadow: "var(--shadow-card)" }}>
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-10 h-10 rounded-[var(--radius-md)] bg-[var(--warning-50)] flex items-center justify-center">
+                  <Activity className="w-5 h-5 text-[var(--warning-500)]" strokeWidth={2} />
+                </div>
+              </div>
+              <CountUp
+                value={growthPercentage}
+                format={formatPercent}
+                delayMs={380}
+                className="block font-display text-[28px] font-bold text-[var(--text-primary)] leading-[1.1] tracking-[-0.01em] mb-1"
+              />
+              <p className="text-[13px] font-medium text-[var(--text-secondary-new)] mb-1">
+                Crecimiento
+              </p>
+              <p className="text-[11px] text-[var(--text-tertiary-new)]">
+                Desde capital inicial
+              </p>
+            </div>
+          </div>
+
+          {/* Earnings Chart + Collection Rate */}
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-3 mb-6">
+            <div className="lg:col-span-2">
+              <EarningsChart data={monthlyData} />
+            </div>
+            <div className="rounded-[var(--radius-lg)] bg-[var(--surface-1)] p-5 flex flex-col items-center justify-center animate-in stagger-6" style={{ boxShadow: "var(--shadow-card)" }}>
+              <h3 className="text-[14px] font-semibold text-[var(--text-primary)] mb-4">Tasa de Cobro</h3>
+              <ProgressRing percentage={collectionRate} size={140} strokeWidth={10} />
+              <p className="text-[12px] text-[var(--text-tertiary-new)] mt-4 text-center">
+                Porcentaje de intereses cobrados vs esperados
+              </p>
+            </div>
+          </div>
+
+          {/* Upcoming Payments + Top Clients */}
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 mb-6">
+            <UpcomingPayments payments={upcomingPayments} />
+            <TopClients clients={topClients} />
+          </div>
+
+          {/* Activity Timeline */}
+          <ActivityTimeline activities={activities} />
         </div>
       </main>
       <BottomNav />
