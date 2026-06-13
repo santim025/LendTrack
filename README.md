@@ -2,6 +2,8 @@
 
 Aplicacion web para prestamistas independientes que necesitan gestionar clientes, prestamos, pagos y capital de forma centralizada. Construida con Next.js 16, PostgreSQL y Prisma.
 
+**Demo en produccion:** [prestador-app-production.up.railway.app](https://prestador-app-production.up.railway.app/auth/login)
+
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
@@ -90,7 +92,7 @@ docker-compose up -d
 | Email | Nodemailer (SMTP) |
 | Graficos | Recharts |
 | Testing | Vitest, Testing Library |
-| Deploy | Docker, Vercel |
+| Deploy | Docker, Railway |
 
 ## Instalacion
 
@@ -135,7 +137,7 @@ Copia `.env.example` a `.env.local` y completa los valores:
 |----------|-------------|---------|
 | `DATABASE_URL` | Connection string de PostgreSQL | `postgresql://user:pass@localhost:5432/prestador_db` |
 | `NEXTAUTH_SECRET` | Secreto para firmar tokens JWT. Generar con: `openssl rand -base64 32` | `abc123...` |
-| `NEXTAUTH_URL` | URL publica de la app | `http://localhost:3000` |
+| `NEXTAUTH_URL` | URL publica de la app | `http://localhost:3000` (produccion: `https://prestador-app-production.up.railway.app`) |
 | `SMTP_HOST` | Host del servidor SMTP (para consolidados por email) | `smtp.gmail.com` |
 | `SMTP_PORT` | Puerto SMTP | `587` |
 | `SMTP_USER` | Usuario SMTP | `tu-email@gmail.com` |
@@ -267,9 +269,11 @@ pnpm lint
 - Variables de entorno para todos los secrets.
 - Panel de admin protegido por rol tanto en cliente como en servidor.
 
-## Demo
+## Despliegue
 
-[prestador-app-pink.vercel.app](https://prestador-app-pink.vercel.app)
+La aplicacion esta desplegada en **Railway**: [prestador-app-production.up.railway.app](https://prestador-app-production.up.railway.app/auth/login).
+
+El deploy se construye con el `Dockerfile` multi-stage del repositorio. En Railway se configuran las mismas variables de entorno descritas arriba; recuerda fijar `NEXTAUTH_URL` a la URL publica de Railway para que la autenticacion funcione correctamente. El contenedor ejecuta `prisma db push` al arrancar para sincronizar el schema con la base de datos.
 
 ## Licencia
 
