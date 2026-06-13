@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LendTrack V2 — Detalle de Prestamo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand-50: #E8F5EF; --brand-100: #C6E7D3; --brand-200: #8FD4AC;
+  --brand-300: #4DB87C; --brand-400: #1A9D5E; --brand-500: #0A6847;
+  --brand-600: #085A3B; --brand-700: #064C31; --brand-800: #043E27;
+  --off-black: #1A1A2E; --text-secondary: #6B7280; --text-tertiary: #9CA3AF;
+  --border: rgba(0,0,0,0.06); --border-strong: rgba(0,0,0,0.1);
+  --bg-base: #FAF7F2; --bg-subtle: #F5F1EB; --bg-card: #FFFFFF;
+  --success: #0A6847; --success-bg: #E8F5EF;
+  --warning: #B45309; --warning-bg: #FEF3C7;
+  --danger: #DC2626; --danger-bg: #FEE2E2;
+  --info: #1E4FC4; --info-bg: #E6EFFE;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.03);
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 20px;
+  --radius-full: 9999px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --text-xs: 11px; --text-sm: 13px; --text-base: 14px; --text-lg: 16px;
+  --text-xl: 20px; --text-2xl: 24px; --text-3xl: 30px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--bg-base); color: var(--off-black); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body::before { content: ''; position: fixed; inset: 0; background-image: radial-gradient(circle, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 24px 24px; pointer-events: none; z-index: 0; }
+
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.animate-in { animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.stagger-1 { animation-delay: 0ms; } .stagger-2 { animation-delay: 60ms; }
+.stagger-3 { animation-delay: 120ms; } .stagger-4 { animation-delay: 180ms; }
+.stagger-5 { animation-delay: 240ms; } .stagger-6 { animation-delay: 300ms; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+
+/* HEADER */
+.header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); height: 56px; display: flex; align-items: center; padding: 0 var(--space-6); }
+.header-inner { max-width: 1280px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; }
+.logo { display: flex; align-items: center; gap: var(--space-2); text-decoration: none; }
+.logo-icon { width: 32px; height: 32px; background: var(--brand-500); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: white; font-family: var(--font-display); font-weight: 800; font-size: 14px; }
+.logo-text { font-family: var(--font-display); font-weight: 700; font-size: var(--text-lg); color: var(--off-black); }
+.header-nav { display: flex; align-items: center; gap: var(--space-1); height: 100%; }
+.nav-link { display: flex; align-items: center; gap: var(--space-2); padding: 0 var(--space-4); height: 100%; font-size: var(--text-sm); font-weight: 500; color: var(--text-secondary); text-decoration: none; border-bottom: 2px solid transparent; transition: all 0.2s; }
+.nav-link:hover { color: var(--off-black); }
+.nav-link.active { color: var(--off-black); border-bottom-color: var(--brand-500); }
+.nav-link svg { width: 16px; height: 16px; }
+.header-right { display: flex; align-items: center; gap: var(--space-3); }
+.avatar { width: 32px; height: 32px; border-radius: var(--radius-full); background: var(--brand-50); color: var(--brand-600); display: flex; align-items: center; justify-content: center; font-size: var(--text-xs); font-weight: 600; }
+.btn-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--bg-card); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); cursor: pointer; }
+.btn-icon svg { width: 16px; height: 16px; }
+.notification-badge { position: relative; }
+.notification-badge::after { content: '3'; position: absolute; top: -4px; right: -4px; width: 16px; height: 16px; border-radius: var(--radius-full); background: var(--danger); color: white; font-size: 9px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+
+/* MAIN */
+.main { max-width: 1280px; margin: 0 auto; padding: var(--space-8) var(--space-6); padding-bottom: var(--space-16); position: relative; z-index: 1; }
+
+/* BREADCRUMB */
+.breadcrumb { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-6); font-size: var(--text-sm); flex-wrap: wrap; }
+.breadcrumb a { color: var(--text-secondary); text-decoration: none; transition: color 0.15s; }
+.breadcrumb a:hover { color: var(--brand-500); }
+.breadcrumb svg { width: 14px; height: 14px; color: var(--text-tertiary); flex-shrink: 0; }
+.breadcrumb .current { color: var(--off-black); font-weight: 500; }
+
+/* LOAN HERO */
+.loan-hero {
+  background: var(--bg-card); border-radius: var(--radius-xl); padding: var(--space-8);
+  box-shadow: var(--shadow-md); border: 1px solid var(--border); margin-bottom: var(--space-6);
+  display: grid; grid-template-columns: 1fr auto; gap: var(--space-8); align-items: center;
+}
+.loan-hero-left {}
+.loan-id { font-size: var(--text-xs); font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-2); }
+.loan-client { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); }
+.loan-client-avatar { width: 44px; height: 44px; border-radius: var(--radius-full); background: var(--brand-50); color: var(--brand-600); display: flex; align-items: center; justify-content: center; font-size: var(--text-sm); font-weight: 600; }
+.loan-client-name { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 700; }
+.loan-client-link { font-size: var(--text-xs); color: var(--brand-500); text-decoration: none; }
+.loan-client-link:hover { text-decoration: underline; }
+.loan-amount-hero { font-family: var(--font-display); font-size: 40px; font-weight: 800; color: var(--off-black); line-height: 1; margin-bottom: var(--space-2); }
+.loan-amount-sub { font-size: var(--text-sm); color: var(--text-secondary); }
+.loan-amount-sub strong { color: var(--brand-500); font-weight: 600; }
+
+.loan-hero-right { text-align: center; }
+.progress-ring-container { position: relative; width: 140px; height: 140px; margin: 0 auto var(--space-3); }
+.progress-ring-container svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.progress-ring-bg { fill: none; stroke: var(--bg-subtle); stroke-width: 8; }
+.progress-ring-fill { fill: none; stroke: var(--brand-500); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+.progress-ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.progress-ring-value { font-family: var(--font-display); font-size: var(--text-2xl); font-weight: 700; color: var(--off-black); }
+.progress-ring-label { font-size: var(--text-xs); color: var(--text-secondary); }
+
+.loan-status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: var(--radius-full); font-size: var(--text-xs); font-weight: 600; }
+.loan-status-badge.active { background: var(--success-bg); color: var(--success); }
+.loan-status-badge.overdue { background: var(--danger-bg); color: var(--danger); }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; }
+.status-dot.active { background: var(--success); }
+.status-dot.overdue { background: var(--danger); }
+
+/* DETAILS GRID */
+.details-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); margin-bottom: var(--space-6); }
+.detail-item { background: var(--bg-card); border-radius: var(--radius-md); padding: var(--space-5); box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
+.detail-label { font-size: var(--text-xs); color: var(--text-secondary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: var(--space-2); }
+.detail-value { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 700; }
+.detail-sub { font-size: var(--text-xs); color: var(--text-tertiary); margin-top: 2px; }
+
+/* AMORTIZATION TABLE */
+.section-card { background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border); overflow: hidden; }
+.section-header { display: flex; align-items: center; justify-content: space-between; padding: var(--space-5); }
+.section-title { font-family: var(--font-display); font-size: var(--text-base); font-weight: 600; }
+.amort-table { width: 100%; border-collapse: collapse; }
+.amort-table th { text-align: left; padding: var(--space-3) var(--space-5); font-size: var(--text-xs); font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 1px solid var(--border); background: var(--bg-subtle); }
+.amort-table td { padding: var(--space-3) var(--space-5); font-size: var(--text-sm); border-bottom: 1px solid var(--border); }
+.amort-table tr:last-child td { border-bottom: none; }
+.amort-table tr:hover td { background: rgba(0,0,0,0.01); }
+.amort-table tr.paid td { color: var(--text-secondary); }
+.amort-table tr.current td { background: var(--brand-50); font-weight: 500; }
+.amort-table tr.overdue td { background: var(--danger-bg); }
+
+.amort-status { display: inline-flex; align-items: center; gap: 4px; font-size: var(--text-xs); font-weight: 600; padding: 2px 8px; border-radius: var(--radius-full); }
+.amort-status.paid { background: var(--success-bg); color: var(--success); }
+.amort-status.pending { background: var(--bg-subtle); color: var(--text-secondary); }
+.amort-status.current { background: var(--brand-50); color: var(--brand-600); }
+.amort-status.overdue { background: var(--danger-bg); color: var(--danger); }
+
+.amort-amount { font-family: var(--font-display); font-weight: 600; }
+.mark-paid-btn { padding: 4px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--bg-card); font-size: var(--text-xs); font-weight: 500; color: var(--brand-500); cursor: pointer; transition: all 0.15s; }
+.mark-paid-btn:hover { background: var(--brand-50); border-color: var(--brand-200); }
+
+/* NOTES SECTION */
+.notes-section { margin-top: var(--space-4); }
+.note-input { display: flex; gap: var(--space-3); padding: var(--space-5); }
+.note-input textarea { flex: 1; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: var(--space-3); font-family: var(--font-body); font-size: var(--text-sm); resize: none; min-height: 60px; transition: border-color 0.15s; }
+.note-input textarea:focus { outline: none; border-color: var(--brand-400); box-shadow: 0 0 0 3px rgba(10,104,71,0.1); }
+.note-input button { align-self: flex-end; }
+
+.notes-list { padding: 0 var(--space-5) var(--space-5); }
+.note-item { padding: var(--space-4) 0; border-bottom: 1px solid var(--border); }
+.note-item:last-child { border-bottom: none; }
+.note-text { font-size: var(--text-sm); line-height: 1.5; }
+.note-meta { font-size: var(--text-xs); color: var(--text-tertiary); margin-top: var(--space-2); }
+
+/* BOTTOM NAV */
+.bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-top: 1px solid var(--border); height: 64px; }
+.bottom-nav-inner { display: flex; align-items: center; justify-content: space-around; height: 100%; }
+.bottom-nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; text-decoration: none; color: var(--text-tertiary); padding: var(--space-2) var(--space-3); }
+.bottom-nav-item.active { color: var(--brand-500); }
+.bottom-nav-item svg { width: 20px; height: 20px; }
+.bottom-nav-item span { font-size: 10px; font-weight: 500; }
+
+.btn { display: inline-flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-4); border-radius: var(--radius-sm); font-size: var(--text-sm); font-weight: 500; cursor: pointer; transition: all 0.15s; border: none; text-decoration: none; }
+.btn svg { width: 16px; height: 16px; }
+.btn-primary { background: var(--brand-500); color: white; }
+.btn-primary:hover { background: var(--brand-600); }
+.btn-secondary { background: var(--bg-subtle); color: var(--off-black); border: 1px solid var(--border-strong); }
+.btn-secondary:hover { background: var(--bg-base); }
+
+.mockup-badge { position: fixed; bottom: 80px; right: 16px; z-index: 100; background: var(--off-black); color: white; font-family: var(--font-body); font-size: 11px; font-weight: 500; padding: 6px 12px; border-radius: var(--radius-full); box-shadow: var(--shadow-lg); }
+@media (min-width: 769px) { .mockup-badge { bottom: 16px; } }
+
+@media (max-width: 1024px) {
+  .header-nav { display: none; }
+  .details-grid { grid-template-columns: repeat(2, 1fr); }
+  .loan-hero { grid-template-columns: 1fr; text-align: center; }
+  .loan-hero-right { order: -1; }
+  .loan-client { justify-content: center; }
+}
+@media (max-width: 768px) {
+  .main { padding: var(--space-4) var(--space-4) 80px; }
+  .loan-hero { padding: var(--space-5); }
+  .loan-amount-hero { font-size: var(--text-2xl); }
+  .details-grid { grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+  .bottom-nav { display: block; }
+  .amort-table { font-size: var(--text-xs); }
+  .amort-table th, .amort-table td { padding: var(--space-2) var(--space-3); }
+}
+@media (max-width: 480px) {
+  .details-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="dashboard.html" class="logo">
+      <div class="logo-icon">L</div>
+      <span class="logo-text">LendTrack</span>
+    </a>
+    <nav class="header-nav">
+      <a href="dashboard.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a href="cliente-detalle.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        Clientes
+      </a>
+      <a href="#" class="nav-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M10 7v10l5-5-5-5z"/></svg>
+        Prestamos
+      </a>
+      <a href="pagos.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Pagos
+      </a>
+      <a href="capital.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg>
+        Capital
+      </a>
+      <a href="consolidado.html" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Consolidado
+      </a>
+    </nav>
+    <div class="header-right">
+      <button class="btn-icon notification-badge" aria-label="Notificaciones">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
+      <div class="avatar">SM</div>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+  <!-- BREADCRUMB -->
+  <nav class="breadcrumb animate-in stagger-1">
+    <a href="dashboard.html">Prestamos</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    <a href="cliente-detalle.html">Juan Perez</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    <span class="current">Prestamo #003</span>
+  </nav>
+
+  <!-- LOAN HERO -->
+  <div class="loan-hero animate-in stagger-2">
+    <div class="loan-hero-left">
+      <div class="loan-id">Prestamo #003</div>
+      <div class="loan-client">
+        <div class="loan-client-avatar">JP</div>
+        <div>
+          <div class="loan-client-name">Juan Perez</div>
+          <a href="cliente-detalle.html" class="loan-client-link">Ver perfil del cliente</a>
+        </div>
+      </div>
+      <div class="loan-amount-hero">$1.200.000</div>
+      <div class="loan-amount-sub">Cuota mensual de <strong>$120.000</strong> (interes 10%)</div>
+    </div>
+    <div class="loan-hero-right">
+      <div class="progress-ring-container">
+        <svg viewBox="0 0 140 140">
+          <circle class="progress-ring-bg" cx="70" cy="70" r="58"/>
+          <circle class="progress-ring-fill" cx="70" cy="70" r="58" stroke-dasharray="364.4" stroke-dashoffset="218.6"/>
+        </svg>
+        <div class="progress-ring-text">
+          <span class="progress-ring-value">40%</span>
+          <span class="progress-ring-label">4 de 10 cuotas</span>
+        </div>
+      </div>
+      <span class="loan-status-badge active"><span class="status-dot active"></span>Activo</span>
+    </div>
+  </div>
+
+  <!-- DETAILS GRID -->
+  <div class="details-grid">
+    <div class="detail-item animate-in stagger-3">
+      <div class="detail-label">Tasa de Interes</div>
+      <div class="detail-value">10% mensual</div>
+      <div class="detail-sub">$120.000/mes en intereses</div>
+    </div>
+    <div class="detail-item animate-in stagger-3">
+      <div class="detail-label">Fecha de Inicio</div>
+      <div class="detail-value">15 Feb 2025</div>
+      <div class="detail-sub">Frecuencia: cada 30 dias</div>
+    </div>
+    <div class="detail-item animate-in stagger-4">
+      <div class="detail-label">Total a Recibir</div>
+      <div class="detail-value" style="color: var(--brand-500);">$1.920.000</div>
+      <div class="detail-sub">Capital + $720.000 intereses</div>
+    </div>
+    <div class="detail-item animate-in stagger-4">
+      <div class="detail-label">Proxima Cuota</div>
+      <div class="detail-value" style="color: var(--warning);">15 Jul 2025</div>
+      <div class="detail-sub">Faltan 3 dias</div>
+    </div>
+  </div>
+
+  <!-- AMORTIZATION TABLE -->
+  <div class="section-card animate-in stagger-5">
+    <div class="section-header">
+      <h2 class="section-title">Tabla de Amortizacion</h2>
+      <button class="btn btn-secondary" style="font-size: 12px; padding: 6px 12px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar
+      </button>
+    </div>
+    <table class="amort-table">
+      <thead>
+        <tr>
+          <th>Cuota</th>
+          <th>Vencimiento</th>
+          <th>Interes</th>
+          <th>Total</th>
+          <th>Estado</th>
+          <th>Fecha Pago</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="paid">
+          <td style="font-weight: 500;">#1</td>
+          <td>15 Mar 2025</td>
+          <td class="amort-amount">$120.000</td>
+          <td class="amort-amount">$120.000</td>
+          <td><span class="amort-status paid">Pagada</span></td>
+          <td style="color: var(--text-secondary);">14 Mar 2025</td>
+          <td></td>
+        </tr>
+        <tr class="paid">
+          <td style="font-weight: 500;">#2</td>
+          <td>15 Abr 2025</td>
+          <td class="amort-amount">$120.000</td>
+          <td class="amort-amount">$120.000</td>
+          <td><span class="amort-status paid">Pagada</span></td>
+          <td style="color: var(--text-secondary);">16 Abr 2025</td>
+          <td></td>
+        </tr>
+        <tr class="paid">
+          <td style="font-weight: 500;">#3</td>
+          <td>15 May 2025</td>
+          <td class="amort-amount">$120.000</td>
+          <td class="amort-amount">$120.000</td>
+          <td><span class="amort-status paid">Pagada</span></td>
+          <td style="color: var(--text-secondary);">15 May 2025</td>
+          <td></td>
+        </tr>
+        <tr class="paid">
+          <td style="font-weight: 500;">#4</td>
+          <td>15 Jun 2025</td>
+          <td class="amort-amount">$120.000</td>
+          <td class="amort-amount">$120.000</td>
+          <td><span class="amort-status paid">Pagada</span></td>
+          <td style="color: var(--text-secondary);">17 Jun 2025</td>
+          <td></td>
+        </tr>
+        <tr class="current">
+          <td style="font-weight: 600;">#5</td>
+          <td style="font-weight: 500;">15 Jul 2025</td>
+          <td class="amort-amount" style="color: var(--brand-500);">$120.000</td>
+          <td class="amort-amount" style="color: var(--brand-500);">$120.000</td>
+          <td><span class="amort-status current">Pendiente</span></td>
+          <td style="color: var(--text-tertiary);">—</td>
+          <td><button class="mark-paid-btn">Marcar pagada</button></td>
+        </tr>
+        <tr>
+          <td>#6</td>
+          <td>15 Ago 2025</td>
+          <td class="amort-amount">$120.000</td>
+          <td class="amort-amount">$120.000</td>
+          <td><span class="amort-status pending">Pendiente</span></td>
+          <td style="color: var(--text-tertiary);">—</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>#7</td>
+          <td>15 Sep 2025</td>
+          <td class="amort-amount">$120.000</td>
+          <td class="amort-amount">$120.000</td>
+          <td><span class="amort-status pending">Pendiente</span></td>
+          <td style="color: var(--text-tertiary);">—</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>#8</td>
+          <td>15 Oct 2025</td>
+          <td class="amort-amount">$120.000</td>
+          <td class="amort-amount">$120.000</td>
+          <td><span class="amort-status pending">Pendiente</span></td>
+          <td style="color: var(--text-tertiary);">—</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>#9</td>
+          <td>15 Nov 2025</td>
+          <td class="amort-amount">$120.000</td>
+          <td class="amort-amount">$120.000</td>
+          <td><span class="amort-status pending">Pendiente</span></td>
+          <td style="color: var(--text-tertiary);">—</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>#10</td>
+          <td>15 Dic 2025</td>
+          <td class="amort-amount">$120.000</td>
+          <td class="amort-amount">$120.000</td>
+          <td><span class="amort-status pending">Pendiente</span></td>
+          <td style="color: var(--text-tertiary);">—</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- NOTES -->
+  <div class="section-card notes-section animate-in stagger-6">
+    <div class="section-header">
+      <h2 class="section-title">Notas</h2>
+    </div>
+    <div class="note-input">
+      <textarea placeholder="Agregar una nota sobre este prestamo..."></textarea>
+      <button class="btn btn-primary" style="padding: 8px 16px; font-size: 12px;">Guardar</button>
+    </div>
+    <div class="notes-list">
+      <div class="note-item">
+        <div class="note-text">Cliente pidio extension de 3 dias para la cuota de Junio. Aceptado, sin recargo.</div>
+        <div class="note-meta">Santiago — 10 Jun 2025, 2:30 PM</div>
+      </div>
+      <div class="note-item">
+        <div class="note-text">Prestamo aprobado. Cliente con buena referencia, ya habia pagado el prestamo #001 a tiempo.</div>
+        <div class="note-meta">Santiago — 14 Feb 2025, 10:15 AM</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="dashboard.html" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Inicio</span>
+    </a>
+    <a href="cliente-detalle.html" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      <span>Clientes</span>
+    </a>
+    <a href="#" class="bottom-nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M10 7v10l5-5-5-5z"/></svg>
+      <span>Prestamos</span>
+    </a>
+    <a href="pagos.html" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      <span>Pagos</span>
+    </a>
+    <a href="capital.html" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/></svg>
+      <span>Capital</span>
+    </a>
+    <a href="consolidado.html" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>Reporte</span>
+    </a>
+  </div>
+</nav>
+
+<div class="mockup-badge">LendTrack V2 — Detalle Prestamo</div>
+
+</body>
+</html>

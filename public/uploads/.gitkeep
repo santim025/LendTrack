@@ -1,0 +1,2 @@
+# Mantiene la carpeta public/uploads en el repo.
+# En Railway, esta ruta se monta como Volume para persistir los archivos subidos.

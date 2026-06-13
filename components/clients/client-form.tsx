@@ -5,6 +5,7 @@ import type React from "react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { User, Phone, MapPin, ImagePlus } from "lucide-react";
 
 interface ClientFormProps {
   onSuccess: () => void;
@@ -45,7 +46,6 @@ export function ClientForm({ onSuccess }: ClientFormProps) {
     try {
       let imageUrl = null;
 
-      // Upload image if provided
       if (imageFile) {
         const uploadFormData = new FormData();
         uploadFormData.append("file", imageFile);
@@ -63,7 +63,6 @@ export function ClientForm({ onSuccess }: ClientFormProps) {
         imageUrl = uploadData.url;
       }
 
-      // Save client to database
       const response = await fetch("/api/clients", {
         method: "POST",
         headers: {
@@ -91,9 +90,10 @@ export function ClientForm({ onSuccess }: ClientFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       <div className="space-y-1.5">
-        <label htmlFor="name" className="form-label block">
+        <label htmlFor="name" className="form-label flex items-center gap-2">
+          <User className="h-3.5 w-3.5 text-[var(--text-tertiary-new)]" strokeWidth={1.75} />
           Nombre
         </label>
         <Input
@@ -108,7 +108,8 @@ export function ClientForm({ onSuccess }: ClientFormProps) {
       </div>
 
       <div className="space-y-1.5">
-        <label htmlFor="phoneNumber" className="form-label block">
+        <label htmlFor="phoneNumber" className="form-label flex items-center gap-2">
+          <Phone className="h-3.5 w-3.5 text-[var(--text-tertiary-new)]" strokeWidth={1.75} />
           Celular
         </label>
         <Input
@@ -123,7 +124,8 @@ export function ClientForm({ onSuccess }: ClientFormProps) {
       </div>
 
       <div className="space-y-1.5">
-        <label htmlFor="address" className="form-label block">
+        <label htmlFor="address" className="form-label flex items-center gap-2">
+          <MapPin className="h-3.5 w-3.5 text-[var(--text-tertiary-new)]" strokeWidth={1.75} />
           Dirección
         </label>
         <Textarea
@@ -138,7 +140,8 @@ export function ClientForm({ onSuccess }: ClientFormProps) {
       </div>
 
       <div className="space-y-1.5">
-        <label htmlFor="payage_image" className="form-label block">
+        <label htmlFor="payage_image" className="form-label flex items-center gap-2">
+          <ImagePlus className="h-3.5 w-3.5 text-[var(--text-tertiary-new)]" strokeWidth={1.75} />
           Imagen del Pagaré (opcional)
         </label>
         <Input
@@ -150,13 +153,17 @@ export function ClientForm({ onSuccess }: ClientFormProps) {
         />
       </div>
 
-      {error && <p className="text-[12px] text-red-600">{error}</p>}
+      {error && (
+        <div className="rounded-lg bg-[var(--danger-50)] border border-[var(--danger-500)]/20 p-3">
+          <p className="text-[12px] text-[var(--danger-500)]">{error}</p>
+        </div>
+      )}
 
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full rounded-lg bg-foreground text-background py-2.5 text-[13px] transition-opacity hover:opacity-90 disabled:opacity-60"
-        style={{ fontWeight: 500 }}
+        className="w-full rounded-lg bg-[var(--brand-500)] py-3 text-[13px] text-white transition-colors hover:bg-[var(--brand-600)] disabled:opacity-60"
+        style={{ fontWeight: 600 }}
       >
         {isLoading ? "Guardando..." : "Guardar Cliente"}
       </button>
