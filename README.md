@@ -1,280 +1,249 @@
 # LendTrack
 
-Aplicacion web para prestamistas independientes que necesitan gestionar clientes, prestamos, pagos y capital de forma centralizada. Construida con Next.js 16, PostgreSQL y Prisma.
+> Aplicación web full-stack para prestamistas independientes: gestiona clientes, préstamos, cuotas, pagos y capital en un solo lugar, con tabla de amortización, reportes consolidados en PDF, panel de administración y diseño responsive. Construida con Next.js 16, Prisma y PostgreSQL.
 
-**Demo en produccion:** [prestador-app-production.up.railway.app](https://prestador-app-production.up.railway.app/auth/login)
+![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=flat&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React_19-61DAFB?style=flat&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=flat&logo=postgresql&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=flat&logo=prisma&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-151_passing-6E9F18?style=flat&logo=vitest&logoColor=white)
 
-![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+**Demo en producción:** [lendtrack.up.railway.app](https://lendtrack.up.railway.app/auth/login)
 
-## Inicio rapido
+## Inicio rápido
 
-```bash
-git clone https://github.com/santim025/prestador-app.git
-cd prestador-app
-cp .env.example .env.local
-# Edita .env.local con tu DATABASE_URL y NEXTAUTH_SECRET
-
-docker-compose up -d
-# La app queda disponible en http://localhost:3000
-```
-
-## Caracteristicas
-
-### Dashboard
-
-- Capital disponible, prestado y ganancias totales en tiempo real.
-- Grafico mensual de intereses cobrados.
-- Tasa de cobro (porcentaje de intereses recuperados vs esperados).
-- Proximos pagos a vencer y clientes con mayor movimiento.
-- Timeline de actividad reciente (pagos, prestamos, clientes nuevos).
-
-### Gestion de clientes
-
-- Registro con nombre, telefono, direccion y foto de pagare.
-- Busqueda por nombre con paginacion.
-- Historial de prestamos por cliente.
-
-### Gestion de prestamos
-
-- Creacion de prestamos con monto, tasa de interes y fecha de inicio.
-- Generacion automatica de cuotas mensuales segun la fecha de inicio.
-- Estados: activo, saldado, en mora.
-- Edicion de prestamos existentes.
-
-### Registro de pagos
-
-- Marcar cuotas como pagadas con fecha real de cobro.
-- Separacion en pendientes, completados y vencidos.
-- Actualizacion automatica del capital al registrar un pago.
-
-### Capital
-
-- Capital inicial configurable.
-- Capital actual = inicial + intereses cobrados.
-- Porcentaje de crecimiento.
-- Tabla de movimientos (cada interes cobrado).
-
-### Consolidado de pagos
-
-- Generacion de PDF profesional con los pagos de un rango de meses.
-- Descarga directa o envio por correo electronico (SMTP).
-- Incluye totales, cantidad de pagos y clientes involucrados.
-
-### Panel de administracion
-
-- Listado de todos los usuarios registrados con su actividad.
-- Eliminacion de usuarios y sus datos (solo rol `admin`).
-
-## Capturas de pantalla
-
-| | | |
-|:---:|:---:|:---:|
-| ![Logo](screenshots/01_Logo.png) | ![Bienvenido](screenshots/02_Bienvenido.png) | ![Registro](screenshots/03_Registro.png) |
-| ![Mi Panel](screenshots/04_Mi_Panel.png) | ![Agregar Prestamo](screenshots/05_Agregar_Prestamo.png) | ![Panel Actualizado](screenshots/06_Panel_Actualizado.png) |
-| ![Mis Prestamos](screenshots/07_Mis_Prestamos.png) | | |
-
-## Stack tecnologico
-
-| Categoria | Tecnologia |
-|-----------|------------|
-| Frontend | Next.js 16, React 19, TypeScript |
-| Estilos | Tailwind CSS 4, shadcn/ui (Radix) |
-| Backend | Next.js API Routes (App Router) |
-| Base de datos | PostgreSQL 16 |
-| ORM | Prisma 6 |
-| Autenticacion | NextAuth.js (credentials + JWT), bcrypt |
-| Reportes PDF | PDFKit |
-| Email | Nodemailer (SMTP) |
-| Graficos | Recharts |
-| Testing | Vitest, Testing Library |
-| Deploy | Docker, Railway |
-
-## Instalacion
-
-### Requisitos
-
-- Node.js 20+
-- pnpm
-- PostgreSQL 16 (o usar Docker con red compartida)
-
-### Desarrollo local
+Necesitas Node.js 20+, pnpm y una base de datos PostgreSQL 16 (local o vía Docker).
 
 ```bash
-# Instalar dependencias
+git clone https://github.com/santim025/LendTrack.git
+cd LendTrack
 pnpm install
 
-# Configurar variables de entorno
 cp .env.example .env.local
-# Editar .env.local (ver seccion de configuracion)
+# Edita .env.local con DATABASE_URL y NEXTAUTH_SECRET (ver "Configuración")
 
-# Sincronizar schema con la base de datos
-pnpm db:push
-
-# Iniciar servidor de desarrollo
-pnpm dev
+pnpm db:push        # sincroniza el schema con la base de datos
+pnpm dev            # arranca en http://localhost:3000
 ```
 
-La app queda disponible en `http://localhost:3000`.
+Abre `http://localhost:3000`, crea una cuenta y empieza a registrar clientes y préstamos. Para levantar todo con Docker, mira [Despliegue](#despliegue).
 
-### Docker
+## Características
+
+- **Dashboard**: capital disponible, prestado, ganancias y crecimiento; gráfico de ganancias mensuales; anillo de tasa de cobro; próximos pagos; top de clientes; y timeline de actividad con filtros.
+- **Clientes**: alta con nombre, teléfono, dirección e imagen de pagaré; búsqueda y paginación; vista de detalle con estadísticas, historial de préstamos y actividad reciente.
+- **Préstamos**: creación con monto, tasa de interés, fecha de inicio y frecuencia (7/15/30 días); generación automática de cuotas; estados activo/en mora/saldado; detalle con anillo de progreso y **tabla de amortización**; edición de tasa, frecuencia y capital adicional.
+- **Pagos**: marcar y revertir cuotas como cobradas; pestañas de pendientes y completados; filtro por cliente; alertas de vencido y próximo; el capital se actualiza automáticamente al cobrar.
+- **Capital**: capital inicial configurable; capital actual = inicial + intereses cobrados; porcentaje de crecimiento; tabla de movimientos.
+- **Consolidado**: genera un PDF profesional con los pagos cobrados en un rango de meses; lo descargas o lo envías por correo (SMTP).
+- **Panel de administración**: lista usuarios con su actividad, elimina usuarios (rol `admin`) y regenera pagos faltantes de forma masiva.
+- **Autenticación JWT** con NextAuth (sesión de 30 días), contraseñas cifradas con bcrypt y aislamiento total de datos por usuario.
+- **Diseño responsive** con navegación inferior dedicada en móvil.
+
+## Capturas
+
+Panel principal con métricas, gráfico de ganancias, tasa de cobro, próximos pagos y actividad:
+
+![Dashboard](screenshots/02_dashboard.png)
+
+<details>
+<summary>Ver más pantallas</summary>
+
+| Iniciar sesión | Crear cuenta |
+|----------------|--------------|
+| ![Login](screenshots/01_login.png) | ![Registro](screenshots/03_signup.png) |
+
+| Clientes | Detalle de cliente |
+|----------|--------------------|
+| ![Clientes](screenshots/04_clientes.png) | ![Detalle de cliente](screenshots/05_cliente_detalle.png) |
+
+| Préstamos | Detalle de préstamo (amortización) |
+|-----------|------------------------------------|
+| ![Préstamos](screenshots/06_prestamos.png) | ![Detalle de préstamo](screenshots/07_prestamo_detalle.png) |
+
+| Pagos pendientes | Pagos completados |
+|------------------|-------------------|
+| ![Pagos pendientes](screenshots/08_pagos.png) | ![Pagos completados](screenshots/09_pagos_completados.png) |
+
+| Capital | Consolidado |
+|---------|-------------|
+| ![Capital](screenshots/10_capital.png) | ![Consolidado](screenshots/11_consolidado.png) |
+
+Versión móvil del dashboard:
+
+<img src="screenshots/12_dashboard_mobile.png" alt="Dashboard móvil" width="300" />
+
+</details>
+
+## Stack tecnológico
+
+| Capa | Tecnologías |
+|------|-------------|
+| Frontend | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, shadcn/ui (Radix), Recharts, lucide-react |
+| Backend | Next.js API Routes, Prisma 6 |
+| Base de datos | PostgreSQL 16 |
+| Autenticación | NextAuth.js (credentials + JWT), bcrypt |
+| Reportes | PDFKit (PDF), Nodemailer (email SMTP) |
+| Tests | Vitest, Testing Library |
+| Despliegue | Docker, Railway |
+
+## Configuración
+
+Copia `.env.example` a `.env.local` y completa los valores. Si tu contraseña tiene caracteres especiales en `DATABASE_URL`, codifícalos en URL (`!` → `%21`, `@` → `%40`, etc.).
+
+| Variable | Requerida | Descripción |
+|----------|:---------:|-------------|
+| `DATABASE_URL` | Sí | Cadena de conexión PostgreSQL (`postgresql://usuario:clave@host:5432/prestador_db`). |
+| `NEXTAUTH_SECRET` | Sí | Clave para firmar los tokens JWT. Genera una con `openssl rand -base64 32`. |
+| `NEXTAUTH_URL` | Sí | URL pública de la app. Local: `http://localhost:3000`. Producción: `https://lendtrack.up.railway.app`. |
+| `SMTP_HOST` | No¹ | Host SMTP para enviar consolidados (`smtp.gmail.com`). |
+| `SMTP_PORT` | No¹ | Puerto SMTP (`587`). |
+| `SMTP_USER` | No¹ | Usuario SMTP (`tu-email@gmail.com`). |
+| `SMTP_PASSWORD` | No¹ | App password de 16 caracteres (sin espacios). |
+| `SMTP_FROM` | No | Remitente que aparece en los correos (`LendTrack <tu-email@gmail.com>`). |
+
+> ¹ Solo necesarias si vas a enviar el consolidado por correo. La descarga del PDF funciona sin SMTP.
+
+## API
+
+Base: `/api`. Todas las rutas requieren una sesión autenticada (cookie de NextAuth), salvo `/auth/register` y `/auth/[...nextauth]`. Las rutas `/admin/*` exigen además rol `admin`. Cada petición está acotada al usuario de la sesión (`userId`).
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `POST` | `/auth/register` | Crea una cuenta (`email`, `password` ≥ 6). |
+| `GET` `POST` | `/auth/[...nextauth]` | Handlers de NextAuth (login, sesión, logout). |
+| `GET` `POST` | `/clients` | Lista / crea clientes. |
+| `GET` `DELETE` | `/clients/:id` | Detalle (con préstamos, stats y actividad) / elimina. |
+| `GET` `POST` | `/loans` | Lista préstamos con progreso / crea préstamo y genera cuotas. |
+| `GET` `PUT` `DELETE` | `/loans/:id` | Detalle y amortización / actualiza tasa, frecuencia o capital adicional / elimina. |
+| `POST` | `/loans/:id/generate-payments` | Genera las cuotas faltantes de un préstamo. |
+| `GET` | `/payments` | Lista pagos con estado de mora y días al vencimiento. |
+| `PUT` | `/payments/:id` | Marca o revierte un pago (`wasPaid`). |
+| `GET` `PUT` | `/capital` | Obtiene / actualiza el capital inicial. |
+| `GET` | `/dashboard` | Métricas agregadas del panel principal. |
+| `POST` | `/upload` | Sube una imagen (pagaré) y devuelve su URL. |
+| `GET` | `/reports/consolidated/pdf` | Descarga el PDF consolidado (`?from=YYYY-MM&to=YYYY-MM`). |
+| `POST` | `/reports/consolidated/email` | Genera y envía el consolidado por correo. |
+| `GET` | `/admin/users` | Lista todos los usuarios con su actividad (admin). |
+| `DELETE` | `/admin/users/:id` | Elimina un usuario y sus datos (admin). |
+| `POST` | `/admin/generate-all-payments` | Regenera los pagos faltantes de todos los préstamos (admin). |
+
+### Ejemplo
 
 ```bash
-docker-compose up -d
+# Registro (ruta pública)
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"ana@lendtrack.app","password":"password123"}'
+
+# Crear un cliente (requiere cookie de sesión de NextAuth)
+curl -X POST http://localhost:3000/api/clients \
+  -H "Content-Type: application/json" \
+  -b "next-auth.session-token=<TOKEN_DE_SESION>" \
+  -d '{"name":"Juan Pérez","phoneNumber":"3001234567","address":"Calle 12 #34-56"}'
 ```
-
-El contenedor ejecuta `prisma db push` automaticamente al arrancar para sincronizar el schema. Requiere que PostgreSQL este accesible en la red `shared-network` (configurable en `docker-compose.yml`).
-
-### Variables de entorno
-
-Copia `.env.example` a `.env.local` y completa los valores:
-
-| Variable | Descripcion | Ejemplo |
-|----------|-------------|---------|
-| `DATABASE_URL` | Connection string de PostgreSQL | `postgresql://user:pass@localhost:5432/prestador_db` |
-| `NEXTAUTH_SECRET` | Secreto para firmar tokens JWT. Generar con: `openssl rand -base64 32` | `abc123...` |
-| `NEXTAUTH_URL` | URL publica de la app | `http://localhost:3000` (produccion: `https://prestador-app-production.up.railway.app`) |
-| `SMTP_HOST` | Host del servidor SMTP (para consolidados por email) | `smtp.gmail.com` |
-| `SMTP_PORT` | Puerto SMTP | `587` |
-| `SMTP_USER` | Usuario SMTP | `tu-email@gmail.com` |
-| `SMTP_PASSWORD` | App password de Gmail (16 caracteres, sin espacios) | `abcd1234...` |
-| `SMTP_FROM` | Remitente que aparece en los correos | `LendTrack <tu-email@gmail.com>` |
-
-Si tu password tiene caracteres especiales en `DATABASE_URL`, URL-encodealos (`!` -> `%21`, `@` -> `%40`, etc.).
 
 ## Uso
 
 ### Primer arranque
 
-1. Registra una cuenta en `/auth/signup`.
-2. Define tu capital inicial en la seccion **Mi Capital**.
-3. Agrega clientes en **Clientes** > **Nuevo Cliente**.
-4. Crea un prestamo en **Prestamos** > **Nuevo Prestamo** (selecciona cliente, monto, tasa de interes y fecha de inicio).
-5. Las cuotas se generan automaticamente. Registralas como pagadas en **Pagos**.
+1. Regístrate en `/auth/signup`.
+2. Define tu capital inicial en **Capital**.
+3. Agrega clientes en **Clientes → Nuevo Cliente**.
+4. Crea un préstamo en **Préstamos → Nuevo Préstamo** (cliente, monto, tasa, fecha de inicio y frecuencia).
+5. Las cuotas se generan automáticamente. Márcalas como cobradas en **Pagos**.
 
 ### Roles de usuario
 
 | Rol | Permisos |
 |-----|----------|
-| `user` | Acceso completo a sus propios datos (clientes, prestamos, pagos, capital, consolidados). |
-| `admin` | Todo lo anterior + panel de administracion para gestionar usuarios. |
+| `user` | Acceso completo a sus propios datos (clientes, préstamos, pagos, capital, consolidados). |
+| `admin` | Todo lo anterior + panel de administración para gestionar usuarios. |
 
-Para promocionar un usuario a admin:
+Para promover un usuario a admin:
 
 ```bash
 pnpm exec tsx scripts/make-admin.ts usuario@email.com
 ```
 
-### Generacion de pagos
+### Scripts útiles
 
-Los pagos se generan automaticamente al crear un prestamo. Si necesitas regenerarlos:
-
-```bash
-# Regenerar pagos de un prestamo especifico
-# (via API) POST /api/loans/[id]/generate-payments
-
-# Regenerar todos los pagos del sistema (admin)
-# (via API) POST /api/admin/generate-all-payments
-```
-
-### Consolidado por correo
-
-Desde la seccion **Consolidado**, selecciona un rango de meses y un correo destinatario. El PDF incluye:
-
-- Detalle de cada pago: cliente, mes, fecha de cobro, tasa, monto prestado e interes.
-- Totales: dinero cobrado, cantidad de pagos y clientes involucrados.
-
-### Scripts utiles
-
-| Script | Descripcion |
+| Script | Descripción |
 |--------|-------------|
 | `scripts/make-admin.ts` | Promueve un usuario a rol admin. |
-| `scripts/generate-payments.js` | Genera pagos pendientes para todos los prestamos activos. |
+| `scripts/generate-payments.js` | Genera pagos pendientes para todos los préstamos activos. |
 | `scripts/regenerate-all-payments.ts` | Regenera todos los pagos del sistema. |
 | `scripts/cleanup-database.ts` | Limpia datos de prueba. |
 | `scripts/cleanup-duplicate-payments.ts` | Elimina pagos duplicados. |
-| `scripts/seed-admin.mjs` | Crea el superusuario inicial (se ejecuta automaticamente en Docker si `ADMIN_EMAIL` esta definido). |
+| `scripts/seed-admin.mjs` | Crea el superusuario inicial (automático en Docker si `ADMIN_EMAIL` está definido). |
+
+## Tests
+
+El proyecto incluye **151 pruebas** unitarias y de integración con Vitest sobre la API (clientes, préstamos, pagos, capital, dashboard, admin, upload, registro, reportes) y la lógica de negocio (calendario de cuotas, generación automática y reporte consolidado). Toda la aritmética de fechas se valida en UTC, por lo que la suite es independiente de la zona horaria.
+
+```bash
+pnpm test              # ejecuta la batería (151 tests)
+pnpm test:watch        # modo watch
+pnpm test:coverage     # cobertura con reportes
+pnpm test:ui           # UI interactiva de Vitest
+```
 
 ## Estructura del proyecto
 
 ```
-prestador-app/
+LendTrack/
 ├── app/                          # Next.js App Router
-│   ├── api/                      # Rutas de la API
-│   │   ├── auth/                 # NextAuth + registro
-│   │   ├── clients/              # CRUD de clientes
-│   │   ├── loans/                # CRUD de prestamos + generar pagos
-│   │   ├── payments/             # CRUD de pagos
-│   │   ├── capital/              # Gestion de capital
-│   │   ├── dashboard/            # Datos del dashboard
-│   │   ├── reports/              # PDF y email de consolidados
-│   │   ├── admin/                # Panel de administracion
-│   │   └── upload/               # Subida de imagenes
-│   ├── auth/                     # Paginas de login y registro
-│   ├── clientes/                 # UI de gestion de clientes
-│   ├── prestamos/                # UI de gestion de prestamos
-│   ├── pagos/                    # UI de registro de pagos
-│   ├── capital/                  # UI de capital
-│   ├── consolidado/              # UI de reportes
-│   ├── admin/                    # UI de administracion
-│   └── dashboard/                # UI del dashboard
+│   ├── api/                      # Rutas de la API (auth, clients, loans, payments, capital, dashboard, reports, admin, upload)
+│   ├── auth/                     # Login, registro y confirmación
+│   ├── clientes/                 # Listado y detalle de clientes
+│   ├── prestamos/                # Listado y detalle de préstamos
+│   ├── pagos/                    # Registro de pagos
+│   ├── capital/                  # Gestión de capital
+│   ├── consolidado/              # Reportes consolidados
+│   ├── admin/                    # Panel de administración
+│   └── dashboard/                # Panel principal
 ├── components/                   # Componentes React
 │   ├── ui/                       # Componentes base (shadcn/ui)
-│   ├── dashboard/                # Componentes del dashboard
+│   ├── dashboard/                # Nav, stats, gráfico, timeline, anillo de progreso
 │   ├── clients/                  # Formularios y tarjetas de clientes
-│   ├── loans/                    # Formularios y tarjetas de prestamos
-│   ├── payments/                 # Tarjetas de pagos
-│   └── providers/                # Providers (SessionProvider)
-├── lib/                          # Logica de negocio
-│   ├── auth.ts                   # Configuracion de NextAuth
+│   ├── loans/                    # Formularios y tarjetas de préstamos
+│   └── payments/                 # Tarjetas de pagos
+├── lib/                          # Lógica de negocio
+│   ├── auth.ts                   # Configuración de NextAuth
 │   ├── prisma.ts                 # Cliente de Prisma
-│   ├── payment-schedule.ts       # Calculo de fechas de pago
-│   ├── auto-generate-payments.ts # Generacion automatica de cuotas
-│   └── reports/                  # Generacion de PDF y envio de email
-├── prisma/
-│   └── schema.prisma             # Schema de base de datos
+│   ├── payment-schedule.ts       # Cálculo de fechas de cuotas (UTC)
+│   ├── auto-generate-payments.ts # Generación automática de cuotas
+│   └── reports/                  # Generación de PDF y envío de email
+├── prisma/schema.prisma          # Schema de base de datos (User, UserCapital, Client, Loan, Payment)
 ├── scripts/                      # Scripts de mantenimiento
 ├── __tests__/                    # Tests (Vitest)
-├── public/                       # Assets estaticos
-├── docker-compose.yml            # Orquestacion Docker
-├── Dockerfile                    # Build multi-stage para produccion
-└── package.json                  # Dependencias y scripts
-```
-
-## Testing
-
-```bash
-pnpm test              # Ejecutar tests una vez
-pnpm test:watch        # Modo watch
-pnpm test:coverage     # Cobertura con reportes
-pnpm test:ui           # UI interactiva de Vitest
-```
-
-## Linting
-
-```bash
-pnpm lint
+├── docker-compose.yml            # Orquestación Docker
+└── Dockerfile                    # Build multi-stage para producción
 ```
 
 ## Seguridad
 
-- Autenticacion JWT con NextAuth.js (sesion de 30 dias).
-- Contrasenas hasheadas con bcrypt.
-- Aislamiento de datos: cada usuario solo accede a sus propios registros (verificacion por `userId` en cada query).
-- Middleware de autenticacion que protege todas las rutas privadas.
-- Variables de entorno para todos los secrets.
-- Panel de admin protegido por rol tanto en cliente como en servidor.
+- Autenticación JWT con NextAuth.js (sesión de 30 días) y contraseñas cifradas con bcrypt.
+- Aislamiento de datos: cada usuario solo accede a sus propios registros (verificación por `userId` en cada query).
+- Middleware que protege todas las rutas privadas.
+- Panel de admin protegido por rol en cliente y servidor.
+- Todos los secretos se gestionan por variables de entorno.
 
 ## Despliegue
 
-La aplicacion esta desplegada en **Railway**: [prestador-app-production.up.railway.app](https://prestador-app-production.up.railway.app/auth/login).
+La aplicación está desplegada en **Railway**: [lendtrack.up.railway.app](https://lendtrack.up.railway.app/auth/login).
 
-El deploy se construye con el `Dockerfile` multi-stage del repositorio. En Railway se configuran las mismas variables de entorno descritas arriba; recuerda fijar `NEXTAUTH_URL` a la URL publica de Railway para que la autenticacion funcione correctamente. El contenedor ejecuta `prisma db push` al arrancar para sincronizar el schema con la base de datos.
+### Docker
+
+```bash
+cp .env.example .env.local        # completa DATABASE_URL y NEXTAUTH_SECRET
+docker-compose up -d
+```
+
+El contenedor ejecuta `prisma db push` al arrancar para sincronizar el schema. Requiere que PostgreSQL sea accesible en la red `shared-network` (configurable en `docker-compose.yml`). En Railway se configuran las mismas variables de entorno; recuerda fijar `NEXTAUTH_URL` a la URL pública para que la autenticación funcione.
 
 ## Licencia
 
-MIT
+MIT.
